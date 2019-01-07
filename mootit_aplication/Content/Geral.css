@@ -1,0 +1,278 @@
+﻿.dataTables_scroll
+{
+    min-height:370px;
+}
+fieldset
+{
+padding:3px;
+margin:0 auto;
+margin-top:15px;  
+font-size:14px;
+font-family:helvetica, Sans-Serif;  
+}
+.bordless
+{
+    border:0px;
+}
+.subtitle
+{
+    margin-top:10px;
+}
+#btn
+{
+ display:block;
+ margin:0 auto;
+ border:1px #E0EEEE solid;
+ background-color:#e5e2e2;
+ width:100%;
+padding:3px;
+}
+
+.Nbtn
+{
+line-height:40px;
+margin:15px 15px 15px 15px;
+padding:2px;
+}
+
+.btnTop
+{
+ min-width:100px;
+ font-size:16px;   
+ margin:10px 0px 10px 8px;
+ color:#fff;
+ background:#4D90FE;
+ }
+ .btnTop:hover
+ {
+     background:#4682B4;
+ }
+
+
+.btnVoltar
+{
+margin:10px 0px 10px 2%;
+font-size:16px
+}
+
+b
+{
+    display:inline-block;
+    font-size:21px;
+    margin-top:0px;
+    vertical-align:top;
+    
+}
+
+.btnTabela
+{
+ border:0px;
+ text-decoration:none;
+ padding:1px
+ }
+ 
+ #topobtn { 
+   width: 101%;
+   height: 28px;
+   position:fixed; 
+   border-bottom:1px #848484 solid;
+   text-align: center;
+   font-size: 12px;
+   color: #FFF;
+   top: -36px;
+   padding-top: 8px;
+   font-family:Verdana,Arial,sans-serif;
+   margin-left:-20px;
+   background-image:url('../../Content/images/fundobtn.png');
+}
+
+                         /*---------------------------------------------- Painel -------------------------------------------------*/
+#painel
+{
+   text-align: center; margin-left: auto; margin-right: auto; margin-top:-20px; 
+   
+}
+
+
+.painel
+{
+    
+    width:100%;
+    display:inline-block;
+    border-bottom:2px inset #A1A8AD;
+    border-top:0px;
+    border-left:0px;
+    border-right:0px;
+    margin-bottom:20px;
+  
+}
+                     /*--------------------------------------------------FIM------------------------------------------*/
+
+.field
+{
+    padding:2px;
+    display:inline-block;
+    font-weight:bold;
+    font-size:14px;
+}
+
+#arearma
+{
+    display:block;
+    float:right;
+    margin-right:30%;
+    margin-top:10px;
+    line-height:30px;
+    padding:5px;
+}
+
+
+/*-----------------------------Motivo--------------------------*/
+.layout
+{
+    
+    width:100%;
+    font-size:16px;
+    text-align: center; 
+    margin-left: auto; 
+    margin-right: auto; 
+    margin-bottom:10px;
+    
+}
+.lblHoraExame
+{
+    display:inline-block;
+    margin-left:10%;
+}
+.painelDrop
+{
+ min-height:100px;
+}
+
+.painelDrop div
+{
+    border: 1px solid black;
+    margin: 5px;
+}
+.msg
+{
+    height: 20px;
+}
+
+.lblExame 
+{
+    margin-left:8px;
+    color:Red;
+    font-weight:bold;
+}
+
+
+.destino
+{
+    display:inline-block;
+    width:42%;
+    text-align: center; 
+    float:right;
+    font-size:15px;
+    margin-right:55px;
+    margin-top:10px;
+  
+}
+  
+#destino div
+{
+    background-color:#4D90FE;
+    cursor:pointer;
+    color:#fff;
+    font-size:15px;
+    
+}
+#destino div:hover
+{
+    background-color:#A7ADB2;
+    color:#E9DB52;
+    font-style:italic;
+    font-weight:bolder;
+}
+
+.origem
+{
+  display:inline-block;
+  width:42%;
+  text-align: center;
+  margin-left:55px;
+  margin-top:10px; 
+  float :left;
+  font-size:15px; 
+}
+
+#origem div
+{
+    background-color:#A7ADB2;
+    cursor:pointer;
+    color:#000;
+    font-size:14px;
+    font-weight:bold;
+}
+
+#origem div:hover
+{
+    background-color:#4D90FE;
+    color:#fff;
+    font-style:italic;
+    font-weight:bolder;
+    
+}
+
+.msg
+{
+    font-style:italic;
+    font-size:15px;
+    font-family: Arial, Sans-Serif;
+    color:Gray;
+    font-weight:bolder;
+    text-align:center;
+}
+
+
+/*------------------------------Seta--------------------------*/
+.seta
+{
+position:fixed;
+left:97%;
+top:50%;
+
+}
+.cont
+{
+ display:inline-block;
+ width:30px;
+ height:34px;
+ background-image:url('../../Content/images/geral/seta.png');
+ background-repeat:no-repeat;
+ background-position:left;
+ border:0px;
+ margin-right:5px;
+ background-color:transparent;   
+}
+
+.set
+{
+position:fixed;
+right:97%;
+top:50%;  
+}
+
+.contset
+{
+ display:inline-block;
+ width:30px;
+ height:34px;
+ background-image:url('../../Content/images/geral/set.png');
+ background-repeat:no-repeat;
+ background-position:left;
+ border:0px;
+ margin-right:5px;
+ background-color:transparent;   
+}
+

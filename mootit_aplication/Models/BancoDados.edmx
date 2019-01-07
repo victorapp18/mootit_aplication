@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="mootitModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ENDERECO">
+          <Key>
+            <PropertyRef Name="END_ID" />
+          </Key>
+          <Property Name="END_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="USU_ID" Type="int" />
+          <Property Name="END_LOGRADOURO" Type="varchar" MaxLength="100" />
+          <Property Name="END_NR" Type="varchar" MaxLength="10" />
+          <Property Name="END_BAIRRO" Type="varchar" MaxLength="30" />
+          <Property Name="END_CEP" Type="char" MaxLength="9" />
+          <Property Name="END_LATITUDE" Type="varchar" MaxLength="25" />
+          <Property Name="END_LONGITUDE" Type="varchar" MaxLength="25" />
+          <Property Name="END_CIDADE" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="USUARIO">
+          <Key>
+            <PropertyRef Name="USU_ID" />
+          </Key>
+          <Property Name="USU_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="USU_LG" Type="varchar" MaxLength="20" />
+          <Property Name="USU_SN" Type="varchar" MaxLength="1000" />
+          <Property Name="USU_ST" Type="bit" />
+          <Property Name="USU_NM" Type="varchar" MaxLength="50" />
+          <Property Name="USU_TP_AUTH" Type="tinyint" />
+        </EntityType>
+        <Association Name="FK_END_USU_ID">
+          <End Role="USUARIO" Type="Self.USUARIO" Multiplicity="0..1" />
+          <End Role="ENDERECO" Type="Self.ENDERECO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USUARIO">
+              <PropertyRef Name="USU_ID" />
+            </Principal>
+            <Dependent Role="ENDERECO">
+              <PropertyRef Name="USU_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="mootitModelStoreContainer">
+          <EntitySet Name="ENDERECO" EntityType="Self.ENDERECO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="USUARIO" EntityType="Self.USUARIO" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_END_USU_ID" Association="Self.FK_END_USU_ID">
+            <End Role="USUARIO" EntitySet="USUARIO" />
+            <End Role="ENDERECO" EntitySet="ENDERECO" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="mootitModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="mootitEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ENDERECO" EntityType="mootitModel.ENDERECO" />
+          <EntitySet Name="USUARIO" EntityType="mootitModel.USUARIO" />
+          <AssociationSet Name="FK_END_USU_ID" Association="mootitModel.FK_END_USU_ID">
+            <End Role="USUARIO" EntitySet="USUARIO" />
+            <End Role="ENDERECO" EntitySet="ENDERECO" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="ENDERECO">
+          <Key>
+            <PropertyRef Name="END_ID" />
+          </Key>
+          <Property Name="END_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="USU_ID" Type="Int32" />
+          <Property Name="END_LOGRADOURO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="END_NR" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="END_BAIRRO" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="END_CEP" Type="String" MaxLength="9" FixedLength="true" Unicode="false" />
+          <Property Name="END_LATITUDE" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="END_LONGITUDE" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="END_CIDADE" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="USUARIO" Relationship="mootitModel.FK_END_USU_ID" FromRole="ENDERECO" ToRole="USUARIO" />
+        </EntityType>
+        <EntityType Name="USUARIO">
+          <Key>
+            <PropertyRef Name="USU_ID" />
+          </Key>
+          <Property Name="USU_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="USU_LG" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="USU_SN" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="USU_ST" Type="Boolean" />
+          <Property Name="USU_NM" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="USU_TP_AUTH" Type="Byte" />
+          <NavigationProperty Name="ENDERECO" Relationship="mootitModel.FK_END_USU_ID" FromRole="USUARIO" ToRole="ENDERECO" />
+        </EntityType>
+        <Association Name="FK_END_USU_ID">
+          <End Type="mootitModel.USUARIO" Role="USUARIO" Multiplicity="0..1" />
+          <End Type="mootitModel.ENDERECO" Role="ENDERECO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USUARIO">
+              <PropertyRef Name="USU_ID" />
+            </Principal>
+            <Dependent Role="ENDERECO">
+              <PropertyRef Name="USU_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="mootitModelStoreContainer" CdmEntityContainer="mootitEntities1">
+          <EntitySetMapping Name="ENDERECO">
+            <EntityTypeMapping TypeName="mootitModel.ENDERECO">
+              <MappingFragment StoreEntitySet="ENDERECO">
+                <ScalarProperty Name="END_CIDADE" ColumnName="END_CIDADE" />
+                <ScalarProperty Name="END_LONGITUDE" ColumnName="END_LONGITUDE" />
+                <ScalarProperty Name="END_LATITUDE" ColumnName="END_LATITUDE" />
+                <ScalarProperty Name="END_CEP" ColumnName="END_CEP" />
+                <ScalarProperty Name="END_BAIRRO" ColumnName="END_BAIRRO" />
+                <ScalarProperty Name="END_NR" ColumnName="END_NR" />
+                <ScalarProperty Name="END_LOGRADOURO" ColumnName="END_LOGRADOURO" />
+                <ScalarProperty Name="USU_ID" ColumnName="USU_ID" />
+                <ScalarProperty Name="END_ID" ColumnName="END_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="USUARIO">
+            <EntityTypeMapping TypeName="mootitModel.USUARIO">
+              <MappingFragment StoreEntitySet="USUARIO">
+                <ScalarProperty Name="USU_TP_AUTH" ColumnName="USU_TP_AUTH" />
+                <ScalarProperty Name="USU_NM" ColumnName="USU_NM" />
+                <ScalarProperty Name="USU_ST" ColumnName="USU_ST" />
+                <ScalarProperty Name="USU_SN" ColumnName="USU_SN" />
+                <ScalarProperty Name="USU_LG" ColumnName="USU_LG" />
+                <ScalarProperty Name="USU_ID" ColumnName="USU_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

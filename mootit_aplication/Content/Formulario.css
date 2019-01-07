@@ -1,0 +1,91 @@
+﻿fieldset
+{
+padding:3px;
+margin:0 auto;
+margin-top:15px;  
+font-size:14px;
+font-family:helvetica, Sans-Serif;  
+overflow:auto;
+}
+.control-group
+{
+    line-height:25px;
+}
+.controls-row
+{
+    line-height:25px;
+}
+
+.seta
+{
+position:fixed;
+left:97%;
+top:55%;
+
+}
+.cont
+{
+ display:inline-block;
+ width:30px;
+ height:34px;
+ background-image:url('../Content/images/geral/seta.png');
+ background-repeat:no-repeat;
+ background-position:left;
+ border:0px;
+ margin-right:5px;
+ background-color:transparent;   
+}
+
+.set
+{
+position:fixed;
+right:97%;
+top:55%;  
+}
+.legenda {
+display:inline-block;
+position:fixed;
+left:80%;
+top:25%; 
+}
+.contset
+{
+ display:inline-block;
+ width:30px;
+ height:34px;
+ background-image:url('../Content/images/geral/set.png');
+ background-repeat:no-repeat;
+ background-position:left;
+ border:0px;
+ margin-right:5px;
+ background-color:transparent;   
+}
+
+#destino
+{
+    min-height:300px;
+}
+#origem
+{
+    min-height:300px;
+}
+/*-------Galeria----*/
+.imagem
+{
+    min-height:100px;
+    max-height:150px;
+    width:250px;
+}
+.central
+{
+    margin-left:-14%;
+    margin-top:40%;
+}
+
+.space
+{
+    margin-left:10px;
+}
+.ui-autocomplete-loading {
+    background: white url('../../Content/themes/smoothness/images/ui-anim_basic_16x16.gif') right center no-repeat;
+}

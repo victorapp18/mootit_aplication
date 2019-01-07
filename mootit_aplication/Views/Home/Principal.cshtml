@@ -1,0 +1,65 @@
+﻿@model mootit_aplication.Models.ENDERECO
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mapa</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+      <div class="offset1" id="map" style="height:500px;width:80%;"></div>
+      <script>
+          function myMap() {
+            var myCenter = new google.maps.LatLng('@Model.END_LATITUDE', '@Model.END_LONGITUDE');
+            var mapProp = { center: myCenter, zoom: 14, scrollwheel: false, draggable: true, mapTypeId: google.maps.MapTypeId.ROADMAP };
+            var map = new google.maps.Map(document.getElementById("map"), mapProp);
+            var image = new google.maps.MarkerImage('../Content/imagens/pin48.png');
+            var marker = new google.maps.Marker({
+                position: myCenter,
+                icon: image
+            });
+            marker.setMap(map);
+
+                  $.ajax({
+                      dataType: "json",
+                      type: "GET",
+                      url: "/Home/BuscaEndProximo",
+                      success: function (dados) {
+                          $(dados).each(function (i) {
+                              myCenter = new google.maps.LatLng(dados[i].END_LATITUDE, dados[i].END_LONGITUDE);
+                              marker = new google.maps.Marker({ position: myCenter });
+                              marker.setMap(map);
+                          });
+                      }
+                  });
+             
+
+              //for(var i = 0; i < listaEndereco.length; i++) {
+              //    var lat = (listaEndereco.END_LATITUDE);
+              //    alert(lat);
+
+                  //myCenter = new google.maps.LatLng(listaEndereco.END_LATITUDE[i], listaEndereco.END_LONGITUDE[i]);
+                  //marker = new google.maps.Marker({ position: myCenter });
+                  //marker.setMap(map);
+              //}
+
+          }
+
+
+      </script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5RJhHQQaKjJDm_0dBWH2QWaxYyBraSa4&callback=myMap"></script>
+  </body>
+</html>

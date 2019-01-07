@@ -1,0 +1,205 @@
+﻿@using mootit_aplication.Controle;
+@{
+    var imgHome = @Url.Content("~/Content/images/btnHome.png");
+    var imgSenha = @Url.Content("~/Content/images/btnAlteraSenha.png");
+    var USU_ID = @ViewBag.idUsuario;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+
+    <noscript>
+        <meta http-equiv="Refresh" content="1; url=@Url.Action("AddJS", "Index");" />
+    </noscript>
+
+    <link type="image/x-icon" rel="shortcut icon" href='@Url.Content("~/Content/images/favicon.ico")'>
+    <link href="@Url.Content("~/Content/themes/smoothness/jquery-ui-1.10.3.custom.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/bootstrap/css/bootstrap.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/bootstrap/css/bootstrap-responsive.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/CaixaMensagem.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/menu.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/datepicker.css")" rel="stylesheet" type="text/css" />
+
+    <style type="text/css" media="screen">
+        .transparent {
+            background: transparent;
+            border: 0px;
+        }
+    </style>
+
+    <script src="@Url.Content("~/Scripts/mascaras.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-1.10.2.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-migrate-1.2.1.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/principal.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/bootstrap-datepicker.js")" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var url_atual = window.location.href;
+
+            if (url_atual.includes("http://localhost:55034/Usuario/Create") || url_atual.includes("http://localhost:55034/Endereco/Create")) {
+                document.getElementById('btnAlteraSenha').style.visibility = "hidden";
+                document.getElementById('btnSair').style.visibility = "hidden";
+                document.getElementById('spanUsuario').style.visibility = "hidden";
+                document.getElementById('spanNomeUsuario').style.visibility = "hidden";
+            }
+
+            $(function () {
+                $("#menuPrincipal").tabs({
+                    event: "mouseover"
+                });
+                $('.comandos').children().button();
+                $(".tab_flutuante").button();
+                $("input[type=submit]").button();
+            });
+
+            //... Mostrar o calendário nos campos de data
+            $('.datepicker').datepicker();
+
+            //...
+            $('*[data-autocomplete-url]')
+                .each(function () {
+                    $(this).autocomplete({
+                        source: $(this).data("autocomplete-url")
+                    });
+                });
+
+            //... Title dos componentes do formulário HTML recebe Tooltip do JQuery
+            $(function () {
+                $("input[type=submit]").tooltip();
+                $("input[type=checkbox]").tooltip();
+                $('.btn').tooltip();
+                $('.btnTop').tooltip();
+                $('.btnTopo').tooltip();
+                $('#myDataTable').tooltip();
+            });
+
+            //... Janela de dialogo
+            $(function () {
+                $("#dialog-message").dialog({
+                    autoOpen: false,
+                    resizable: false,
+                    modal: true,
+                    buttons: {
+                        Ok: function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+            });
+
+            //... Janela de dialogo de confirmação
+            $(function () {
+                $("#dialog-confirm").dialog({
+                    autoOpen: false,
+                    resizable: false,
+                    height: 210,
+                    modal: true,
+                    buttons: {
+                        "Salvar": function () {
+                            $(this).dialog("close");
+                        },
+                        "Cancelar": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+            });
+
+            //... Desabilitar botão "Submit" ao enviar o formulário
+            $(function () {
+                $("form").submit(function () {
+                    $("input", this).attr("readonly", true);
+                    $("select", this).attr("readonly", true);
+                    $("textarea", this).attr("readonly", true);
+                    $("button[type='submit']", this).attr("disabled", true);
+                    $("input[type='submit']", this).attr("disabled", true);
+                    return true;
+                });
+            });
+
+            $('.aguarde').click(function () {
+                montaAguarde();
+            });
+
+            try {
+                $('#progressBar').dialog({
+                    dialogClass: 'transparent',
+                    autoOpen: false,
+                    resizable: false,
+                    modal: true,
+                    width: 500
+                });
+                $('#progressBar').dialog('widget').find(".ui-dialog-titlebar").hide();
+            } catch (e) { }
+
+        });
+
+        function montaAguarde() {
+            $('#progressBar').dialog('open');
+        }
+
+        var tempo = new Number();
+        tempo = 1800; //tempo em segundos (1800 = 30 minutos)
+        function contagemSessao(){
+            //Se o tempo não for zerado
+            if ((tempo -1) >= 0) {
+                // Pega a parte inteira dos minutos
+                var min = parseInt(tempo / 60);
+                // Calcula os segundos restantes
+                var seg = tempo % 60;
+                // Formata o número menor que dez, ex: 08, 07, ...
+                if (min < 10) {
+                    min = "0" + min;
+                    min = min.substr(0, 2);
+                }
+                if (seg <= 9) {
+                    seg = "0" + seg;
+                }
+                // Cria a variável para formatar no estilo hora/cronômetro
+                horaImprimivel = '00:' + min + ':' + seg;
+                //JQuery pra setar o valor
+                $("#spnSessao").html(horaImprimivel);
+                // Define que a função será executada novamente em 1000ms = 1 segundo
+                setTimeout('contagemSessao()', 1000);
+                // diminui o tempo
+                tempo--;
+            }
+        }
+
+        //... Botão sair
+        function sair(){
+            $.getJSON('@Url.Action("Sair")', {}, function (Json) {
+                window.location.replace(Json.url);
+            });
+        };
+
+    </script>
+    @RenderSection("head", required: false)
+</head>
+<body>
+
+    <div id="container-fluid">
+        <div class="row-fluid">
+            <div class="well well-small span12">
+                <div class="pull-right">
+                    <span id="spanUsuario" class=" navbar-text">Usuário:</span><span id="spanNomeUsuario" style="font-weight:bold;">@ViewBag.usuario</span>
+                    <a class="btn btn-mini btn-danger" id="btnAlteraSenha" href="@Url.Action("AlteraSenha", "Usuario", new { USU_ID = USU_ID })" title="Clique para sair do sistema">Alterar senha <i class="icon-lock icon-white"></i></a>
+                    <a id="btnSair" href="#" onclick="sair();" class="btn btn-mini btn-inverse" title="Clique para alterar a senha">Sair <i class="icon-share-alt icon-white"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <fieldset id="span12">
+                <legend>@ViewBag.Title</legend>
+                @RenderBody()
+            </fieldset>
+        </div>
+    </div>
+
+    
+</body>
+</html>

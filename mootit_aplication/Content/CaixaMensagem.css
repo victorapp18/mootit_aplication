@@ -1,0 +1,50 @@
+﻿.info, .success, .warning, .error, .validation-summary-errors {
+     border: 1px solid;
+     border-left-width:0px;
+     border-right-width:0px;
+     margin: 0px 0px;
+     padding:5px 5px 5px 5px;
+     background-repeat: no-repeat;
+     background-position: 10px center;
+     text-align:center;
+    
+}
+.info {
+     color: #00529B;
+     background-color: #BDE5F8;
+     background-image: url('info.png');
+}
+.success {
+     color: #4F8A10;
+     background-color: #DFF2BF;
+     background-image:url('success.png');
+}
+.warning {
+     color: #9F6000;
+     background-color: #FEEFB3;
+     /*background-image: url('warning.png');*/
+}
+.error {
+     color: #000;
+     background-color: #FF6347;
+     background-image: url('error.png');
+}
+.validation-summary-errors {
+     color: #000;
+     background-color: #FF6347;
+     background-image: url('validation.png');
+}
+
+.valcampo
+{
+    display:block;
+    margin-left:auto;
+    margin-bottom:5px;
+    margin-right:auto;
+    text-align:center;
+    color:Red;
+    font-size:15px;
+    font-style:italic;
+    font-weight:bold;
+    
+}

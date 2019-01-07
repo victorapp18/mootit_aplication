@@ -1,0 +1,64 @@
+﻿@model mootit_aplication.Models.UsuarioViewModel
+
+@{
+    Layout = null;
+    ViewBag.Title = "Entrar no sistema";
+    var _imgTopo = @Url.Content("~/Content/imagens/login.png");
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Entrar no sistema</title>
+
+    <noscript>
+        <meta http-equiv="Refresh" content="1; url=AddJS" />
+    </noscript>
+
+    <link type="image/x-icon" rel="shortcut icon" href='@Url.Content("~/Content/images/favicon.ico")'>
+    <link href="@Url.Content("~/Content/bootstrap/css/bootstrap.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/bootstrap/css/bootstrap-responsive.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/Login.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/jquery-1.10.2.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/ bootstrap.min.js")" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(function () {
+                $('#login').focus();
+            });
+        });
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "form-signin" }))
+        {
+            <h2 class="form-signin-heading"><img class="imgTopo" src="@_imgTopo" /></h2>
+
+            @Html.TextBoxFor(model => model.USU_LG, new { @class = "input-block-level", placeholder = "Login" })
+            @Html.ValidationMessageFor(model => model.USU_LG, " ")
+
+            @Html.PasswordFor(model => model.USU_SN, new { @class = "input-block-level", placeholder = "Senha" })
+            @Html.ValidationMessageFor(model => model.USU_SN, " ")
+
+            <div class="row-fluid">
+                <span class="alert-error">
+                    <label class="pagination-centered">@ViewBag.mensagemTela</label>
+                </span>
+            </div>
+
+            <div class="pagination-centered">
+                <button class="btn btn-large btn-primary" type="submit">
+                    <i class="icon-white icon-user"></i>  Entrar
+                </button>
+                <p></p>
+                @Html.ActionLink("Cadastre-se", "Create", "Usuario", null, new { title = "Cique para se cadastrar no sistema" })
+            </div>
+        }
+    </div>
+
+</body>
+</html>
