@@ -10,6 +10,7 @@ using mootit_aplication.Models;
 using System.Web.Security;
 using mootit_aplication.Controle;
 using System.Globalization;
+using mootit_aplication.Util;
 
 namespace mootit_aplication.Controllers
 {
@@ -99,7 +100,7 @@ namespace mootit_aplication.Controllers
                 float latB = float.Parse(item.END_LATITUDE, CultureInfo.InvariantCulture.NumberFormat);
                 float longB = float.Parse(item.END_LONGITUDE, CultureInfo.InvariantCulture.NumberFormat);
 
-                decimal distance = (DistanceBetween(latA, latB, longA, longB));
+                decimal distance = (DistanceAddress.DistanceBetween(latA, latB, longA, longB));
 
                 listaEndereco.Add(new EnderecoViewModel() { USU_ID = item.USU_ID, END_LATITUDE = item.END_LATITUDE, END_LONGITUDE = item.END_LONGITUDE, END_DISTANCIA = distance });
             }
