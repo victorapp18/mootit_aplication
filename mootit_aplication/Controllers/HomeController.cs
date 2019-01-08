@@ -118,7 +118,7 @@ namespace mootit_aplication.Controllers
                 float latB = float.Parse(item.END_LATITUDE, CultureInfo.InvariantCulture.NumberFormat);
                 float longB = float.Parse(item.END_LONGITUDE, CultureInfo.InvariantCulture.NumberFormat);
 
-                decimal distance = (DistanceAddress.DistanceBetween(latA, latB, longA, longB));
+                double distance = (DistanceAddress.DistanceBetween(latA, latB, longA, longB));
 
                 listaEndereco.Add(new EnderecoViewModel() { USU_ID = item.USU_ID, END_LATITUDE = item.END_LATITUDE, END_LONGITUDE = item.END_LONGITUDE, END_DISTANCIA = distance });
             }

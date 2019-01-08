@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Device.Location;
 using System.Linq;
 using System.Web;
 
@@ -7,20 +8,12 @@ namespace mootit_aplication.Util
 {
     public class DistanceAddress
     {
-        public static decimal DistanceBetween(float latA, float longA, float latB, float longB)
+        public static double DistanceBetween(float sLatitude, float sLongitude, float eLatitude, float eLongitude)
         {
-            var RadianLatA = Math.PI * latA / 180;
-            var RadianLatb = Math.PI * latB / 180;
-            var RadianLongA = Math.PI * longA / 180;
-            var RadianLongB = Math.PI * longB / 180;
+            var sCoord = new GeoCoordinate(sLatitude, sLongitude);
+            var eCoord = new GeoCoordinate(eLatitude, eLongitude);
 
-            double theDistance = (Math.Sin(RadianLatA)) *
-                    Math.Sin(RadianLatb) +
-                    Math.Cos(RadianLatA) *
-                    Math.Cos(RadianLatb) *
-                    Math.Cos(RadianLongA - RadianLongB);
-
-            return Convert.ToDecimal(((Math.Acos(theDistance) * (180.0 / Math.PI)))) * 69.09M * 1.6093M;
+            return sCoord.GetDistanceTo(eCoord);
         }
 
     }
