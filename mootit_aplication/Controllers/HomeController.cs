@@ -123,7 +123,7 @@ namespace mootit_aplication.Controllers
                 listaEndereco.Add(new EnderecoViewModel() { USU_ID = item.USU_ID, END_LATITUDE = item.END_LATITUDE, END_LONGITUDE = item.END_LONGITUDE, END_DISTANCIA = distance });
             }
 
-            listaEndereco = listaEndereco.OrderBy(x => x.END_DISTANCIA).Take(3).ToList();
+            listaEndereco = listaEndereco.OrderByDescending(x => x.END_DISTANCIA).Take(3).ToList();
 
             return Json(listaEndereco, JsonRequestBehavior.AllowGet);
         }
