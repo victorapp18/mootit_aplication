@@ -33,10 +33,10 @@ namespace mootit_aplication.Controllers
             }
             set { Session["USU_ID"] = value; }
         }
-        
+
         #endregion
 
-
+        #region View
 
         // GET: Endereco
         public ActionResult Index()
@@ -172,5 +172,7 @@ namespace mootit_aplication.Controllers
             }
             base.Dispose(disposing);
         }
+        #endregion
+
     }
 }

@@ -1,0 +1,92 @@
+﻿@model mootit_aplication.Models.USUARIO
+
+@{
+    ViewBag.Title = "Altera dados Usuario";
+    var _imgBtnOk = @Url.Content("~/Content/imagens/btnOk.png");
+    var _imgBtnErro = @Url.Content("~/Content/imagens/Cadnegado.png");
+}
+
+<script type="text/javascript">
+   
+</script>
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+@using (Html.BeginForm("Edit", "Usuario", FormMethod.Post, new { @class = "form-inline" }))
+{
+    <div class="offset3">
+        <fieldset class="span8">
+            <div class="controls-row">
+                <div class="control-group span6">
+                    <label>
+                        Nome:
+                    </label>
+                    <div class="controls">
+                       @Html.TextBoxFor(model => model.USU_NM, new { @class = "span12" })
+                    </div>
+                </div>
+            </div>
+            <div class="controls-row">
+                <div class="control-group span4">
+                    <label>
+                        Login:
+                    </label>
+                    <div class="controls">
+                        @Html.TextBoxFor(model => model.USU_LG, new { @class = "span12" })
+                        @Html.Hidden("USU_LG_TEMP")
+                    </div>
+                </div>
+                <div class="control-group span6">
+                    <label>
+                    </label>
+                    <div id="Resultado" class="controls">
+                    </div>
+                </div>
+            </div>
+            <div class="controls-row">
+                <div class="control-group span4">
+                    <label>
+                        Senha:
+                    </label>
+                    <div class="controls">
+                        @Html.PasswordFor(model => model.USU_SN, new { @class = "span12" })
+                    </div>
+                </div>
+                <div class="control-group span4">
+                    <label>
+                        Confirmação:
+                    </label>
+                    <div class="controls">
+                        @Html.Password("confirmacao")
+                    </div>
+                </div>
+                <div class="control-group span4">
+                    <label>
+                    </label>
+                    <div id="ConfirmaSenha" class="controls">
+                    </div>
+                </div>
+            </div>
+            <div class="controls-row">
+                <div class="control-group span4">
+                    <div class="controls">
+                        Se usuário Ativo @Html.CheckBoxFor(model => model.USU_ST.HasValue)
+                    </div>
+                </div>
+            </div>
+            <div class="pagination-centered">
+                <legend></legend>
+                @Html.ActionLink("Voltar", "Principal", "Home", null, new { @class = "btn", title = "Cique para Voltar para Listagem de Usuários" })
+                <input type="submit" class="btn btn-success" value="Salvar" title="Clique para salvar novo Usuário" />
+            </div>
+        </fieldset>
+    </div>
+    <div id="validador">
+        @Html.ValidationSummary(true)
+    </div>
+}

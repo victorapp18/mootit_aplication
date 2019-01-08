@@ -28,9 +28,10 @@ namespace mootit_aplication.Controllers
             }
             set { Session["USU_ID"] = value; }
         }
-        
+
         #endregion
 
+        #region View
         public ActionResult Index()
         {
             return View();
@@ -75,15 +76,32 @@ namespace mootit_aplication.Controllers
         }
         public ActionResult Principal()
         {
+            @ViewBag.idUsuario = this.USU_ID;
+
             ENDERECO eNDERECO = db.ENDERECO.SingleOrDefault(x => x.USU_ID == this.USU_ID);
             
             if (eNDERECO == null)
             {
-                return HttpNotFound();
+               Response.Redirect("~/Endereco/Create?USU_ID=" + this.USU_ID);
+                
             }
             return View(eNDERECO);
         }
 
+        [Authorize]
+        [HttpGet]
+        public ActionResult Sair()
+        {
+            Session.Abandon();
+            FormsAuthentication.SignOut();
+            //...
+            var _resposta = new { url = FormsAuthentication.LoginUrl };
+            return Json(_resposta, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+
+        #region Util
         public JsonResult BuscaEndProximo()
         {
             ENDERECO eNDERECO = db.ENDERECO.SingleOrDefault(x => x.USU_ID == this.USU_ID);
@@ -105,22 +123,11 @@ namespace mootit_aplication.Controllers
                 listaEndereco.Add(new EnderecoViewModel() { USU_ID = item.USU_ID, END_LATITUDE = item.END_LATITUDE, END_LONGITUDE = item.END_LONGITUDE, END_DISTANCIA = distance });
             }
 
-            listaEndereco = listaEndereco.OrderByDescending(x => x.END_DISTANCIA).Take(3).ToList();
+            listaEndereco = listaEndereco.OrderBy(x => x.END_DISTANCIA).Take(3).ToList();
 
             return Json(listaEndereco, JsonRequestBehavior.AllowGet);
         }
-
-        
-        [Authorize]
-        [HttpGet]
-        public ActionResult Sair()
-        {
-            Session.Abandon();
-            FormsAuthentication.SignOut();
-            //...
-            var _resposta = new { url = FormsAuthentication.LoginUrl };
-            return Json(_resposta, JsonRequestBehavior.AllowGet);
-        }
+        #endregion
 
     }
 }

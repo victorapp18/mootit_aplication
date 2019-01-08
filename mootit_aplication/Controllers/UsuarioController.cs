@@ -14,6 +14,7 @@ namespace mootit_aplication.Controllers
     {
         private mootitEntities1 db = new mootitEntities1();
 
+        #region View
         // GET: Usuario
         public ActionResult Index()
         {
@@ -48,8 +49,6 @@ namespace mootit_aplication.Controllers
         [HttpPost]
         public ActionResult Create([Bind(Include = "USU_NM,USU_LG,USU_SN,USU_ST")] USUARIO uSUARIO, FormCollection campos)
         {
-            
-
             USUARIO _item = new USUARIO();
             _item = viewParaEntidade(null, campos);
             
@@ -65,48 +64,22 @@ namespace mootit_aplication.Controllers
 
             return View(uSUARIO);
         }
-
-        protected USUARIO viewParaEntidade(System.IConvertible id, FormCollection campos)
-        {
-            string _senha = "";
-            USUARIO _item = new USUARIO();
-            _item.USU_LG = campos["USU_LG"];
-            _senha = campos["USU_SN"].ToMD5();
-            _item.USU_SN = _senha;//.ToMD5();
-            _item.USU_ST = Convert.ToBoolean(campos["USU_ST"] == "true,false");
-
-            return _item;
-        }
-
-        [HttpGet]
-        public JsonResult AjaxValidaUsuario(string _login)
-        {
-            
-            var _usuario = db.USUARIO.SingleOrDefault(x=>x.USU_LG == _login);
-            if (_usuario != null)
-            {
-                return Json(new { OK = true, Nome = _usuario.USU_LG }, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        
-
         // GET: Usuario/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int? USU_ID)
         {
-            if (id == null)
+            if (USU_ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            USUARIO uSUARIO = db.USUARIO.Find(id);
+            USUARIO uSUARIO = db.USUARIO.Find(USU_ID);
             if (uSUARIO == null)
             {
                 return HttpNotFound();
             }
+
+            ViewBag.usuario = uSUARIO.USU_LG;
+            uSUARIO.USU_SN = uSUARIO.USU_SN.ToMD5();
+
             return View(uSUARIO);
         }
 
@@ -153,6 +126,36 @@ namespace mootit_aplication.Controllers
             return RedirectToAction("Index");
         }
 
+        #endregion
+
+        #region Util
+        protected USUARIO viewParaEntidade(System.IConvertible id, FormCollection campos)
+        {
+            string _senha = "";
+            USUARIO _item = new USUARIO();
+            _item.USU_LG = campos["USU_LG"];
+            _senha = campos["USU_SN"].ToMD5();
+            _item.USU_SN = _senha;//.ToMD5();
+            _item.USU_ST = Convert.ToBoolean(campos["USU_ST"] == "true,false");
+
+            return _item;
+        }
+
+        [HttpGet]
+        public JsonResult AjaxValidaUsuario(string _login)
+        {
+            
+            var _usuario = db.USUARIO.SingleOrDefault(x=>x.USU_LG == _login);
+            if (_usuario != null)
+            {
+                return Json(new { OK = true, Nome = _usuario.USU_LG }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -161,5 +164,6 @@ namespace mootit_aplication.Controllers
             }
             base.Dispose(disposing);
         }
+        #endregion
     }
 }
