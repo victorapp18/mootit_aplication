@@ -6,138 +6,70 @@
     var _imgBtnErro = @Url.Content("~/Content/imagens/Cadnegado.png");
 }
 <script type="text/javascript">
-   
-    $("#confirmacao").text("");
-        // .... Campo Verifica Login Existente
-        $("#USU_LG").keypress(function () {
-            Mascara(this, Login);
-        });
-        $("#USU_SN").focus(function () {
-            $("#_valida_email").text("");
-            $("#_btEmail").hide();
-        });
-
-        var _focar_senha = 0;
-        $("#USU_SN").blur(function () {
-            
-        });
-
-        $("#confirmacao").focus(function () {
-            if (_focar_senha == 1) { $("#USU_SN").focus(); }
-        });
-
-        //Confirmaçao da senha
-        $("#confirmacao").blur(function () {
-            if (_focar_senha != 1) {
-                if ($("#USU_SN").val() == $("#confirmacao").val() && $("#USU_SN").val() != "") {
-                    $("#ConfirmaSenha").text("");
-                    $("#ConfirmaSenha").css({ "color": "Green" });
-                    $("#ConfirmaSenha").prepend('<img id="btnOk" src="@_imgBtnOk" /> Confirmada');
-                }
-                else {
-                    var msg_confirmacao = "Senha não confirmada!";
-                    if ($("#confirmacao").val() == "") { msg_confirmacao = "Digite a confirmação!"; }
-                    $("#ConfirmaSenha").text("");
-                    $("#ConfirmaSenha").css({ "color": "Red" });
-                    $("#ConfirmaSenha").prepend('<img id="btnErro" src="@_imgBtnErro" /> ' + msg_confirmacao);
-                    $("#USU_SN").val("");
-                    $("#confirmacao").val("");
-                    $("#USU_SN").focus();
-                }
-            }
-        });
-
-
-        $("#USU_LG").attr({
-            required: true,
-            maxlength: 50
-        });
-        $("#USU_SN").attr({
-            required: true,
-            maxlength: 20
-        });
-        $("#confirmacao").attr({
-            required: true,
-            maxlength: 20,
-            class: span12
-        });
-        $("#USU_ST").attr({
-            checked: true
-        });
-        
-
-   
-    //CAMPOS QUE GANHA FOCUS
-    function ganhaFocusCampoSenha(login) {
-        var Login = $document.getElementById("#USU_LG");
-        var Nome = $document.getElementById("#USU_NM");
-        var Resultado = $document.getElementById("#Resultado");
-
-        if (Nome == null || Nome == "") {
-            document.getElementById("USU_NM").focus();
-        } else if (Login == null || Login == "") {
-            document.getElementById("USU_LG").focus();
-        } else if (verificaLogin == "btnErro" || verificaLogin == null || verificaLogin == "") {
-            document.getElementById("USU_LG").focus();
-        } else {
-
-        }
-    }
+    ////CAMPOS QUE GANHA FOCUS
 
     function ganhaFocusCampoConfirmaSenha(login) {
-        var Login = $document.getElementById("#USU_LG");
-        var Nome = $document.getElementById("#USU_NM");
-        var Senha = $document.getElementById("#USU_SN");
-        var Resultado = $document.getElementById("#Resultado");
 
-        if (Nome == null || Nome == "") {
-            document.getElementById("USU_NM").focus();
-        } else if (Login == null || Login == "") {
-            document.getElementById("USU_LG").focus();
-        } else if (verificaLogin == "btnErro" || verificaLogin == null || verificaLogin == "") {
-            document.getElementById("USU_LG").focus();
-        } else if (Senha == null || Senha == "") {
-            document.getElementById("USU_SN").focus();
-        }
-    }
-
-    function ganhaFocusCampoLogin(login) {
-        var Login = $document.getElementById("#USU_LG");
-        var Nome = $document.getElementById("#USU_NM");
-        var Senha = $document.getElementById("#USU_SN");
-        var Resultado = $document.getElementById("#Resultado");
-
-        alert(Nome);
-        if (Nome == null || Nome == "") {
-            document.getElementById("USU_NM").focus();
+        if ($("#USU_SN").val().length < 6) {
+            $("#USU_SN").focus();
         }
     }
 
     //CAMPOS QUE PERDE FOCUS
+    //Confirmaçao da senha
+    function perdeFocusCampoConfirmaSenha(login) {
+        
+        if ($("#USU_SN").val() == $("#confirmacao").val() && $("#USU_SN").val() != "") {
+            $("#ConfirmaSenha").text("");
+            $("#ConfirmaSenha").css({ "color": "Green" });
+            $("#ConfirmaSenha").prepend('<img id="btnOk" src="@_imgBtnOk" /> Confirmada');
+
+            $("#ConfirmaSenha").show();
+            
+        }
+        else {
+
+            if ($("#USU_NM").val() != "" && $("#USU_LG").val() != "" && $("#USU_SN").val() != "") {
+                var msg_confirmacao = "Senha não confirmada!";
+                if ($("#confirmacao").val() == "") { msg_confirmacao = "Digite a confirmação!"; }
+                $("#ConfirmaSenha").text("");
+                $("#ConfirmaSenha").css({ "color": "Red" });
+                $("#ConfirmaSenha").prepend('<img id="btnErro" src="@_imgBtnErro" /> ' + msg_confirmacao);
+                $("#USU_SN").val("");
+                $("#confirmacao").val("");
+                $("#USU_SN").focus();
+            }
+
+        }
+    }
+
     function perdeFocusCampoSenha(login) {
         if ($("#USU_SN").val().length < 6) {
-            _focar_senha = 1;
             $("#ConfirmaSenha").text("");
             var _msg_senha = "Mínimo 6 alfanumericos!";
             if ($("#USU_SN").val() == "") { _msg_senha = "Digite a Senha!"; }
             $("#ConfirmaSenha").text("");
             $("#ConfirmaSenha").css({ "color": "Red" });
             $("#ConfirmaSenha").prepend('<img id="btnErro" src="@_imgBtnErro" /> ' + _msg_senha);
+            $("#ConfirmaSenha").show();
         }
         else {
+            document.getElementById('confirmacao').removeAttribute("disabled", "disabled");
             $("#ConfirmaSenha").text("");
-            _focar_senha = 0;
         }
     }
 
 
     function perdeFocusCampoLogin(login) {
+        if ($("#USU_NM").val() != "" && $("#USU_LG").val() != "") {
+            $("#progressBar").show();
+        }
         $.getJSON('@Url.Action("AjaxValidaUsuario")', { _login: $("#USU_LG").val() }, function (j) {
-            if (j == null && $("#USU_LG").val() != "") {
+            if (j.OK == true && $("#USU_LG").val() != "") {
                 $("#Resultado").text("");
                 $("#Resultado").css({ "color": "Green" });
                 $("#Resultado").prepend('<img id="btnOk" src="@_imgBtnOk" /> Login Aceito!');
-                $('#USU_SN').attr('disabled', true);
+                $("#ConfirmaSenha").hide();
             }
             else {
                 if ($("#USU_LG").val() == "") {
@@ -149,9 +81,9 @@
                     $("#USU_SN").val("");
                     $("#confirmacao").val("");
                     $("#USU_LG").focus();
-                    $('#USU_SN').attr('disabled', false);
                 }
             }
+            $("#progressBar").hide();
         });
     }
 </script>
@@ -161,6 +93,14 @@
          margin: 0;
          padding: 0;
      }
+     #progressBar {
+          width: 100%;
+          height: 50px;
+          /* pura mágica */
+          position: absolute;
+          top: 50%; /* posiciona na metade da tela */
+          margin-top: -25px; /* e retrocede metade da altura */
+}
 </style>
 @using (Html.BeginForm("Create", "Usuario", FormMethod.Post, new { @class = "form-inline" }))
 {
@@ -183,8 +123,7 @@
                         Login:
                     </label>
                     <div class="controls">
-                        @Html.TextBoxFor(model => model.USU_LG, new { @class = "span12", id = "USU_LG", onblur = "javascript: perdeFocusCampoLogin(this.value);",
-                       onfocus = "javascript: ganhaFocusCampoLogin(this.value);"})
+                        @Html.TextBoxFor(model => model.USU_LG, new { @class = "span12", id = "USU_LG", onblur = "javascript: perdeFocusCampoLogin(this.value);"})
                     </div>
                 </div>
                 <div class="control-group span6">
@@ -200,7 +139,7 @@
                         Senha:
                     </label>
                     <div class="controls">
-                        @Html.PasswordFor(model => model.USU_SN, new { @class = "span12", id = "USU_SN", onblur = "javascript: perdeFocusCampoSenha(this.value);", onfocus = "javascript: ganhaFocusCampoSenha(this.value);" })
+                        @Html.PasswordFor(model => model.USU_SN, new { @class = "span12", id = "USU_SN", onblur = "javascript: perdeFocusCampoSenha(this.value);" })
                     </div>
                 </div>
                 <div class="control-group span4">
@@ -208,7 +147,7 @@
                         Confirmação:
                     </label>
                     <div class="controls">
-                        @Html.Password("confirmacao")
+                        <input type="password" id="confirmacao" name="confirmacao" onblur = "javascript: perdeFocusCampoConfirmaSenha(this.value);" onfocus = "javascript: ganhaFocusCampoConfirmaSenha(this.value);" disabled="disabled" />
                     </div>
                 </div>
                 <div class="control-group span4">
@@ -228,7 +167,7 @@
             <div class="pagination-centered">
                 <legend></legend>
                 @Html.ActionLink("Voltar", "Index", "Home", null, new { @class = "btn", title = "Cique para Voltar" })
-                <input type="submit" class="btn btn-success" value="Salvar" title="Clique para salvar novo Usuário" />
+                <input type="submit"  class="btn btn-success" value="Salvar" title="Clique para salvar novo Usuário" />
             </div>
         </fieldset>
     </div>
@@ -236,5 +175,10 @@
         @Html.ValidationSummary(true)
     </div>
 
+    <div id="progressBar" style="display:none">
+        <div class="progress progress-striped active">
+            <div class="bar" style="width: 100%;"><span class="pagination-centered">Aguarde...</span></div>
+        </div>
+    </div>
 
 }

@@ -39,7 +39,7 @@
         $(document).ready(function () {
             var url_atual = window.location.href;
 
-            if(USU_ID == null){
+            if(this.USU_ID == null){
                 if (url_atual.includes("http://localhost:55034/Usuario/Create") || url_atual.includes("http://localhost:55034/Endereco/Create")) {
                     document.getElementById('btnAlteraSenha').style.visibility = "hidden";
                     document.getElementById('btnSair').style.visibility = "hidden";

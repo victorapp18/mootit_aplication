@@ -67,6 +67,8 @@ namespace mootit_aplication.Controllers
         // GET: Usuario/Edit/5
         public ActionResult Edit(int? USU_ID)
         {
+            ViewBag.idUsuario = USU_ID;
+
             if (USU_ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -87,8 +89,7 @@ namespace mootit_aplication.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "USU_ID,USU_LG,USU_SN,USU_ST,USU_NM,USU_TP_AUTH")] USUARIO uSUARIO)
+        public ActionResult Edit([Bind(Include = "USU_ID,USU_LG,USU_SN,USU_ST,USU_NM")] USUARIO uSUARIO)
         {
             if (ModelState.IsValid)
             {
@@ -144,18 +145,36 @@ namespace mootit_aplication.Controllers
         [HttpGet]
         public JsonResult AjaxValidaUsuario(string _login)
         {
-            
             var _usuario = db.USUARIO.SingleOrDefault(x=>x.USU_LG == _login);
             if (_usuario != null)
             {
-                return Json(new { OK = true, Nome = _usuario.USU_LG }, JsonRequestBehavior.AllowGet);
+                return Json(new { OK = false}, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                return null;
+                return Json(new { OK = true}, JsonRequestBehavior.AllowGet);
             }
         }
-        
+
+        [HttpGet]
+        public JsonResult AjaxValidaSenhaAntiga(string _senhaAntiga, int _USU_ID)
+        {
+            var _usuario = db.USUARIO.SingleOrDefault(x => x.USU_ID == _USU_ID);
+            if (_usuario != null)
+            {
+                if (_usuario.USU_SN == _senhaAntiga.ToMD5() ) {
+                    return Json(new { OK = true }, JsonRequestBehavior.AllowGet);
+                }else
+                {
+                    return Json(new { OK = false }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return Json(new { OK = true }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

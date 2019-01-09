@@ -34,6 +34,8 @@ namespace mootit_aplication.Controllers
         #region View
         public ActionResult Index()
         {
+            @ViewBag.idUsuario = null; 
+
             return View();
         }
 
