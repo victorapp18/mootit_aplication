@@ -12,6 +12,7 @@ using mootit_aplication.Controle;
 using System.Globalization;
 using mootit_aplication.Util;
 using mootit_aplication.Dominios;
+using System.Device.Location;
 
 namespace mootit_aplication.Controllers
 {
@@ -192,25 +193,36 @@ namespace mootit_aplication.Controllers
             }
 
             //postcode australia 2600 -> 3000
-            float latA = float.Parse(itemUsuario.END_LATITUDE, CultureInfo.InvariantCulture.NumberFormat);
-            float longA = float.Parse(itemUsuario.END_LONGITUDE, CultureInfo.InvariantCulture.NumberFormat);
+            //float latA = float.Parse(itemUsuario.END_LATITUDE, CultureInfo.InvariantCulture.NumberFormat);
+            //float longA = float.Parse(itemUsuario.END_LONGITUDE, CultureInfo.InvariantCulture.NumberFormat);
+
+            //double Lat1 = Convert.ToDouble(itemUsuario.END_LATITUDE);
+            //double Long1 = Convert.ToDouble(itemUsuario.END_LONGITUDE);
 
             List<EnderecoViewModel> listaEndereco = new List<EnderecoViewModel>();
             var enderecos = enderecoDominio.buscarTodosMenosUsuLogodo(itemUsuario.USU_ID); //db.ENDERECO.Where(x => x.USU_ID != itemUsuario.USU_ID).AsQueryable();
 
             foreach (var item in enderecos)
             {
-                float latB = float.Parse(item.END_LATITUDE, CultureInfo.InvariantCulture.NumberFormat);
-                float longB = float.Parse(item.END_LONGITUDE, CultureInfo.InvariantCulture.NumberFormat);
+                double latA = Convert.ToDouble(itemUsuario.END_LATITUDE);
+                double longA = Convert.ToDouble(itemUsuario.END_LONGITUDE);
 
+                double latB = Convert.ToDouble(item.END_LATITUDE);
+                double longB = Convert.ToDouble(item.END_LONGITUDE);
+                
                 double distance = (DistanceAddress.DistanceBetween(latA, latB, longA, longB));
-
+                
                 listaEndereco.Add(new EnderecoViewModel() { USU_ID = item.USU_ID, END_LATITUDE = item.END_LATITUDE, END_LONGITUDE = item.END_LONGITUDE, END_DISTANCIA = distance });
             }
 
-            listaEndereco = listaEndereco.OrderByDescending(x => x.END_DISTANCIA).Take(3).ToList();
+            List<EnderecoViewModel> listaEnderecosProximos =
+                                                            (from end in listaEndereco
+                                                             orderby end.END_DISTANCIA descending
+                                                             select end).Take(3).ToList();
 
-            return Json(listaEndereco, JsonRequestBehavior.AllowGet);
+            listaEndereco = listaEndereco.OrderByDescending(x => x.END_DISTANCIA).Skip(3).Take(3).ToList();
+
+            return Json(listaEnderecosProximos, JsonRequestBehavior.AllowGet);
         }
         #endregion
 
