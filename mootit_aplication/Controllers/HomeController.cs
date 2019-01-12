@@ -11,14 +11,35 @@ using System.Web.Security;
 using mootit_aplication.Controle;
 using System.Globalization;
 using mootit_aplication.Util;
+using mootit_aplication.Dominios;
 
 namespace mootit_aplication.Controllers
 {
     public class HomeController : Controle.Controlador
     {
-        private mootitEntities1 db = new mootitEntities1();
-
         #region Auxiliar
+        private UsuarioDominio _usuarioDominio;
+        public UsuarioDominio usuarioDominio
+        {
+            get
+            {
+                if (_usuarioDominio == null)
+                    _usuarioDominio = new UsuarioDominio();
+                return _usuarioDominio;
+            }
+        }
+
+        private EnderecoDominio _enderecoDominio;
+        public EnderecoDominio enderecoDominio
+        {
+            get
+            {
+                if (_enderecoDominio == null)
+                    _enderecoDominio = new EnderecoDominio();
+                return _enderecoDominio;
+            }
+        }
+
         public int USU_ID
         {
             get
@@ -34,7 +55,7 @@ namespace mootit_aplication.Controllers
         #region View
         public ActionResult Index()
         {
-            @ViewBag.idUsuario = null; 
+            ViewBag.idUsuario = null; 
 
             return View();
         }
@@ -45,19 +66,29 @@ namespace mootit_aplication.Controllers
             ViewBag.text = "";
             try
             {
-                var login = campos["USU_LG"];
-                var buscalogin = db.USUARIO.SingleOrDefault(x=>x.USU_LG == login);
-                
-                if (buscalogin != null)
+                var usu_lg = campos["USU_LG"];
+                var buscalogin = usuarioDominio.buscaPorLogin(usu_lg);
+                    
+                if (buscalogin.Count() > 0)
                 {
+                    string usu_sn = null;
+                    int usu_id = 0;
 
-                    if (buscalogin.USU_SN == campos["USU_SN"].ToMD5()) {
+                    foreach (var item in buscalogin)
+                    {
+                        usu_sn = item.USU_SN;
+                        usu_lg = item.USU_LG;
+                        usu_id = item.USU_ID;
 
-                        this.USU_ID = buscalogin.USU_ID;
+                    }
 
-                        this.USU_LG = buscalogin.USU_LG;
+                    if (usu_sn == campos["USU_SN"].ToMD5()) {
 
-                        return RedirectToAction("Principal");
+                        this.USU_ID = usu_id;
+
+                        this.USU_LG = usu_lg;
+
+                        return RedirectToAction("Principal", new { usu_id = usu_id });
                     }else
                     {
                         mensagem = MensagemTela.erro("senha incorreta");
@@ -76,16 +107,53 @@ namespace mootit_aplication.Controllers
                 return View();
             }
         }
-        public ActionResult Principal()
+        public ActionResult Principal(int? usu_id)
         {
-            @ViewBag.idUsuario = this.USU_ID;
+            @ViewBag.idUsuario = usu_id;
 
-            ENDERECO eNDERECO = db.ENDERECO.SingleOrDefault(x => x.USU_ID == this.USU_ID);
-            
-            if (eNDERECO == null)
+
+            var eNDERECO = enderecoDominio.buscaPorUsu_Id(usu_id);
+
+            ENDERECO item = new ENDERECO();
+            foreach (var _item in eNDERECO)
             {
-               Response.Redirect("~/Endereco/Create?USU_ID=" + this.USU_ID);
+                item.END_ID = _item.END_ID;
+                item.USU_ID = _item.USU_ID;
+                item.END_LOGRADOURO = _item.END_LOGRADOURO;
+                item.END_NR = _item.END_NR;
+                item.END_CIDADE = _item.END_CIDADE;
+                item.END_BAIRRO = _item.END_BAIRRO;
+                item.END_CEP = _item.END_CEP;
+                item.END_LOGRADOURO = _item.END_LOGRADOURO;
+                item.END_LATITUDE = _item.END_LATITUDE;
+                item.END_LONGITUDE = _item.END_LONGITUDE;
+            }
+
+
+            if (eNDERECO.Count() > 0)
+            {
                 
+                if (item.END_LOGRADOURO == null)
+                {
+                    Response.Redirect("~/Endereco/Edit?USU_ID=" + usu_id);
+                }
+                else
+                {
+                    
+                    return View(item);
+                }
+
+            }
+            else
+            {
+
+                ENDERECO _item = new ENDERECO();
+                _item.USU_ID = usu_id;
+
+                enderecoDominio.inserir(_item);
+                
+                Response.Redirect("~/Endereco/Edit?USU_ID=" + usu_id);
+
             }
             return View(eNDERECO);
         }
@@ -106,14 +174,29 @@ namespace mootit_aplication.Controllers
         #region Util
         public JsonResult BuscaEndProximo()
         {
-            ENDERECO eNDERECO = db.ENDERECO.SingleOrDefault(x => x.USU_ID == this.USU_ID);
+            var eNDERECO = enderecoDominio.buscaPorUsu_Id(this.USU_ID);
+
+            ENDERECO itemUsuario = new ENDERECO();
+            foreach (var _item in eNDERECO)
+            {
+                itemUsuario.END_ID = _item.END_ID;
+                itemUsuario.USU_ID = _item.USU_ID;
+                itemUsuario.END_LOGRADOURO = _item.END_LOGRADOURO;
+                itemUsuario.END_NR = _item.END_NR;
+                itemUsuario.END_CIDADE = _item.END_CIDADE;
+                itemUsuario.END_BAIRRO = _item.END_BAIRRO;
+                itemUsuario.END_CEP = _item.END_CEP;
+                itemUsuario.END_LOGRADOURO = _item.END_LOGRADOURO;
+                itemUsuario.END_LATITUDE = _item.END_LATITUDE;
+                itemUsuario.END_LONGITUDE = _item.END_LONGITUDE;
+            }
 
             //postcode australia 2600 -> 3000
-            float latA = float.Parse(eNDERECO.END_LATITUDE, CultureInfo.InvariantCulture.NumberFormat);
-            float longA = float.Parse(eNDERECO.END_LONGITUDE, CultureInfo.InvariantCulture.NumberFormat);
+            float latA = float.Parse(itemUsuario.END_LATITUDE, CultureInfo.InvariantCulture.NumberFormat);
+            float longA = float.Parse(itemUsuario.END_LONGITUDE, CultureInfo.InvariantCulture.NumberFormat);
 
             List<EnderecoViewModel> listaEndereco = new List<EnderecoViewModel>();
-            var enderecos = db.ENDERECO.Where(x => x.USU_ID != eNDERECO.USU_ID).AsQueryable();
+            var enderecos = enderecoDominio.buscarTodosMenosUsuLogodo(itemUsuario.USU_ID); //db.ENDERECO.Where(x => x.USU_ID != itemUsuario.USU_ID).AsQueryable();
 
             foreach (var item in enderecos)
             {

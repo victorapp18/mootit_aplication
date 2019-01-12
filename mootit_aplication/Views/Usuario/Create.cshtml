@@ -18,14 +18,14 @@
     //CAMPOS QUE PERDE FOCUS
     //Confirmaçao da senha
     function perdeFocusCampoConfirmaSenha(login) {
-        
+
         if ($("#USU_SN").val() == $("#confirmacao").val() && $("#USU_SN").val() != "") {
             $("#ConfirmaSenha").text("");
             $("#ConfirmaSenha").css({ "color": "Green" });
             $("#ConfirmaSenha").prepend('<img id="btnOk" src="@_imgBtnOk" /> Confirmada');
 
             $("#ConfirmaSenha").show();
-            
+
         }
         else {
 
@@ -86,6 +86,15 @@
             $("#progressBar").hide();
         });
     }
+
+    function checa(login) {
+        if ($("#USU_NM").val() == "" || $("#USU_LG").val() == "" || $("#USU_SN").val() == "" || $("#confirmacao").val() == "") {
+            alert("Existe campo em branco");
+        } else {
+            document.getElementById('form1').submit();
+        }
+    }
+
 </script>
 <style>
      html, body {
@@ -102,7 +111,7 @@
           margin-top: -25px; /* e retrocede metade da altura */
 }
 </style>
-@using (Html.BeginForm("Create", "Usuario", FormMethod.Post, new { @class = "form-inline" }))
+@using (Html.BeginForm("Create", "Usuario", FormMethod.Post, new { @class = "form-inline", id = "form1" }))
 {
     <div class="offset3">
         <fieldset class="span8">
@@ -112,7 +121,7 @@
                         Nome:
                     </label>
                     <div class="controls">
-                        @Html.TextBoxFor(model => model.USU_NM, new { @class = "span12", id="USU_NM" })
+                        @Html.TextBoxFor(model => model.USU_NM, new { @class = "span12", id= "USU_NM" })
                     </div>
                 </div>
             </div>
@@ -167,7 +176,7 @@
             <div class="pagination-centered">
                 <legend></legend>
                 @Html.ActionLink("Voltar", "Index", "Home", null, new { @class = "btn", title = "Cique para Voltar" })
-                <input type="submit"  class="btn btn-success" value="Salvar" title="Clique para salvar novo Usuário" />
+                <input type="button" class="btn btn-success" value="Salvar" title="Clique para salvar novo Usuário" Onclick="checa();">
             </div>
         </fieldset>
     </div>

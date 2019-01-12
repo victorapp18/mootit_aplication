@@ -4,7 +4,6 @@
     ViewBag.Title = "Novo Endereço";
 }
 
-<link href="@Url.Content("~/Content/Formulario.css")" rel="stylesheet" type="text/css" />
 <script src="@Url.Content("~/Scripts/mascaras.js")" type="text/javascript"></script>
 <script language="javascript" type="text/javascript">
     var string = location.href.split("=").pop();
@@ -23,7 +22,6 @@
         $("#END_CEP")
                 .attr("onKeyPress", "Mascara(this,Cep);")
                 .attr("maxlength", "9");
-        console.log("cheguei");
     }
 </script>
 <style>
@@ -36,9 +34,10 @@
 
 
 
-@using (Html.BeginForm("Create", "Endereco", FormMethod.Post, new { @class = "form-inline", id = "form1" }))
+@using (Html.BeginForm("Edit", "Endereco", FormMethod.Post, new { @class = "form-inline", id = "form1" }))
 {
-    
+    @Html.HiddenFor(model => model.USU_ID)
+    @Html.HiddenFor(model => model.END_ID)
     <div class="offset3">
         <fieldset class="span8">
             <div class="controls-row">
@@ -78,7 +77,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="controls-row">
                 <div class="control-group span4">
                     <label>

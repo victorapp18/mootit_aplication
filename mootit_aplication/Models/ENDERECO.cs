@@ -24,7 +24,7 @@ namespace mootit_aplication.Models
         public string END_LONGITUDE { get; set; }
         public string END_CIDADE { get; set; }
 
-        public decimal END_DISTANCIA { get; set; }
+        public double END_DISTANCIA { get; set; }
 
         public virtual USUARIO USUARIO { get; set; }
     }

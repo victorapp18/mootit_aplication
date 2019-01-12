@@ -1,27 +1,27 @@
 ﻿@model mootit_aplication.Models.ENDERECO
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Mapa</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
+         /* Always set the map height explicitly to define the size of the div
+        * element that contains the map. */
+         #map {
+             height: 100%;
+         }
+         /* Optional: Makes the sample page fill the window. */
+         html, body {
+             height: 100%;
+             margin: 0;
+             padding: 0;
+         }
     </style>
-  </head>
-  <body>
-      <div class="offset1" id="map" style="height:500px;width:80%;"></div>
-      <script>
+</head>
+<body>
+    <div class="offset1" id="map" style="height:500px;width:80%;"></div>
+    <script>
           function myMap() {
             var myCenter = new google.maps.LatLng('@Model.END_LATITUDE', '@Model.END_LONGITUDE');
             var mapProp = { center: myCenter, zoom: 14, scrollwheel: false, draggable: true, mapTypeId: google.maps.MapTypeId.ROADMAP };
@@ -45,7 +45,7 @@
                           });
                       }
                   });
-             
+
 
               //for(var i = 0; i < listaEndereco.length; i++) {
               //    var lat = (listaEndereco.END_LATITUDE);
@@ -59,7 +59,7 @@
           }
 
 
-      </script>
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYpqMPUPYAUrUw-2qOpHTY_qfjwHnmmlc&callback=myMap"></script>
-  </body>
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIjJLZqCnL0zGJ7olMVbt3dDFQ-JS4OOY&callback=myMap"></script>
+</body>
 </html>

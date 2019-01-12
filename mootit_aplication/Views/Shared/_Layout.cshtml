@@ -2,7 +2,7 @@
 @{
     var imgHome = @Url.Content("~/Content/images/btnHome.png");
     var imgSenha = @Url.Content("~/Content/images/btnAlteraSenha.png");
-    var USU_ID = @ViewBag.idUsuario;
+    var idUsuario = @ViewBag.idUsuario;
 }
 <!DOCTYPE html>
 <html>
@@ -39,15 +39,14 @@
         $(document).ready(function () {
             var url_atual = window.location.href;
 
-            if(this.USU_ID == null){
+            
                 if (url_atual.includes("http://localhost:55034/Usuario/Create") || url_atual.includes("http://localhost:55034/Endereco/Create")) {
                     document.getElementById('btnAlteraSenha').style.visibility = "hidden";
                     document.getElementById('btnSair').style.visibility = "hidden";
                     document.getElementById('spanUsuario').style.visibility = "hidden";
                     document.getElementById('spanNomeUsuario').style.visibility = "hidden";
                 }
-            }
-
+            
             $(function () {
                 $("#menuPrincipal").tabs({
                     event: "mouseover"
@@ -188,7 +187,7 @@
             <div class="well well-small span12">
                 <div class="pull-right">
                     <span id="spanUsuario" class=" navbar-text">Usuário:</span><span id="spanNomeUsuario" style="font-weight:bold;">@ViewBag.usuario</span>
-                    <a class="btn btn-mini btn-danger" id="btnAlteraSenha" href="@Url.Action("Edit", "Usuario", new { USU_ID = USU_ID })" title="Clique para alterar seus dados">Alterar dados <i class="icon-lock icon-white"></i></a>
+                    <a class="btn btn-mini btn-danger" id="btnAlteraSenha" href="@Url.Action("Edit", "Usuario", new { USU_ID = idUsuario })" title="Clique para alterar seus dados">Alterar dados <i class="icon-lock icon-white"></i></a>
                     <a id="btnSair" href="#" onclick="sair();" class="btn btn-mini btn-inverse" title="Clique para alterar a senha">Sair <i class="icon-share-alt icon-white"></i></a>
                 </div>
             </div>

@@ -15,13 +15,13 @@ using Newtonsoft.Json;
 using System.Web.Script.Serialization;
 using mootit_aplication.Util;
 using System.Globalization;
+using mootit_aplication.Dominios;
 
 namespace mootit_aplication.Controllers
 {
     public class EnderecoController : Controlador
 
     {
-        private mootitEntities1 db = new mootitEntities1();
 
         #region Auxiliar
         public int USU_ID
@@ -33,39 +33,59 @@ namespace mootit_aplication.Controllers
             }
             set { Session["USU_ID"] = value; }
         }
+        
+        private EnderecoDominio _enderecoDominio;
+        public EnderecoDominio enderecoDominio
+        {
+            get
+            {
+                if (_enderecoDominio == null)
+                    _enderecoDominio = new EnderecoDominio();
+                return _enderecoDominio;
+            }
+        }
+        private UsuarioDominio _usuarioDominio;
+        public UsuarioDominio usuarioDominio
+        {
+            get
+            {
+                if (_usuarioDominio == null)
+                    _usuarioDominio = new UsuarioDominio();
+                return _usuarioDominio;
+            }
+        }
 
         #endregion
 
         #region View
 
         // GET: Endereco
-        public ActionResult Index()
-        {
-            var eNDERECO = db.ENDERECO.Include(e => e.USUARIO);
-            return View(eNDERECO.ToList());
-        }
+        //public ActionResult Index()
+        //{
+        //    var eNDERECO = db.ENDERECO.Include(e => e.USUARIO);
+        //    return View(eNDERECO.ToList());
+        //}
 
         // GET: Endereco/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ENDERECO eNDERECO = db.ENDERECO.Find(id);
-            if (eNDERECO == null)
-            {
-                return HttpNotFound();
-            }
-            return View(eNDERECO);
-        }
+        //public ActionResult Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    ENDERECO eNDERECO = db.ENDERECO.Find(id);
+        //    if (eNDERECO == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(eNDERECO);
+        //}
 
         // GET: Endereco/Create
         public ActionResult Create(int usu_id)
         {
             this.USU_ID = usu_id;
             
-            ViewBag.USU_ID = new SelectList(db.USUARIO, "USU_ID", "USU_LG");
             return View();
         }
 
@@ -81,97 +101,152 @@ namespace mootit_aplication.Controllers
 
             var destination_latLong = GoogleGeoCorder.GetLatLongByAddress(addrres);
 
-            string lat = Convert.ToString(destination_latLong.results[0].geometry.location.lat, CultureInfo.InvariantCulture);
+            //string lat = Convert.ToString(destination_latLong.results[0].geometry.location.lat, CultureInfo.InvariantCulture);
 
-            string lng = Convert.ToString(destination_latLong.results[0].geometry.location.lng, CultureInfo.InvariantCulture);
+            //string lng = Convert.ToString(destination_latLong.results[0].geometry.location.lng, CultureInfo.InvariantCulture);
 
-            eNDERECO.END_LATITUDE = lat;
-            eNDERECO.END_LONGITUDE = lng;
+            eNDERECO.END_LATITUDE = "0";
+            eNDERECO.END_LONGITUDE = "0";
 
             if (ModelState.IsValid)
             {
-                db.ENDERECO.Add(eNDERECO);
-                db.SaveChanges();
+                try
+                {
+                    enderecoDominio.inserir(eNDERECO);
 
-                var buscalogin = db.USUARIO.SingleOrDefault(x => x.USU_ID == this.USU_ID);
-                this.USU_LG = buscalogin.USU_LG;
+                    var buscalogin = usuarioDominio.buscaPorId(this.USU_ID);
 
-                return RedirectToAction("Principal","Home");
+                    foreach (var item in buscalogin)
+                    {
+                        this.USU_LG = item.USU_LG;
+                        eNDERECO.USU_ID = item.USU_ID;
+                    }
+
+                    ViewBag.USU_ID = eNDERECO.USU_ID;
+
+                    return RedirectToAction("Principal", "Home", new {usu_id = eNDERECO.USU_ID });
+                }
+                catch(Exception e)
+                {
+                    mensagem = MensagemTela.erro("erro no sistema: "+e);
+                    return View();
+                }
+                
             }
-
-            ViewBag.USU_ID = new SelectList(db.USUARIO, "USU_ID", "USU_LG", eNDERECO.USU_ID);
             return View(eNDERECO);
         }
 
         
 
         // GET: Endereco/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int? USU_ID)
         {
-            if (id == null)
+            if (USU_ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ENDERECO eNDERECO = db.ENDERECO.Find(id);
-            if (eNDERECO == null)
+
+            var eNDERECO = enderecoDominio.buscaPorUsu_Id(USU_ID);
+            if (eNDERECO.Count() == 0)
             {
-                return HttpNotFound();
+                return View();
             }
-            ViewBag.USU_ID = new SelectList(db.USUARIO, "USU_ID", "USU_LG", eNDERECO.USU_ID);
-            return View(eNDERECO);
+            else
+            {
+                ENDERECO item = new ENDERECO();
+
+                foreach (var _item in eNDERECO)
+                {
+                    item.END_ID = _item.END_ID;
+                    item.USU_ID = _item.USU_ID;
+                    item.END_LOGRADOURO = _item.END_LOGRADOURO;
+                    item.END_NR = _item.END_NR;
+                    item.END_CIDADE = _item.END_CIDADE;
+                    item.END_BAIRRO = _item.END_BAIRRO;
+                    item.END_CEP = _item.END_CEP;
+                    item.END_LOGRADOURO = _item.END_LOGRADOURO;
+                    item.END_LATITUDE = _item.END_LATITUDE;
+                    item.END_LONGITUDE = _item.END_LONGITUDE;
+                }
+
+                return View(item);
+            }
         }
 
         // POST: Endereco/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "END_ID,USU_ID,END_LOGRADOURO,END_NR,END_BAIRRO,END_CEP,END_LATITUDE,END_LONGITUDE")] ENDERECO eNDERECO)
+        public ActionResult Edit([Bind(Include = "END_ID,USU_ID,END_LOGRADOURO,END_NR,END_CIDADE,END_BAIRRO,END_CEP")] ENDERECO eNDERECO)
         {
+
+            string addrres = eNDERECO.END_LOGRADOURO + ", " + eNDERECO.END_NR + ", " + eNDERECO.END_CIDADE + ", " + eNDERECO.END_BAIRRO;
+
+            var destination_latLong = GoogleGeoCorder.GetLatLongByAddress(addrres);
+
+            //string lat = Convert.ToString(destination_latLong.results[0].geometry.location.lat, CultureInfo.InvariantCulture);
+
+            //string lng = Convert.ToString(destination_latLong.results[0].geometry.location.lng, CultureInfo.InvariantCulture);
+
+            eNDERECO.END_LATITUDE = "-1.29267215";
+            eNDERECO.END_LONGITUDE = "-48.47828597";
+
             if (ModelState.IsValid)
             {
-                db.Entry(eNDERECO).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    enderecoDominio.alterar(eNDERECO);
+
+                    return RedirectToAction("Principal", "Home", new { usu_id = eNDERECO.USU_ID });
+                }
+                catch (Exception e)
+                {
+                    mensagem = MensagemTela.erro("erro no sistema: " + e);
+                    return View();
+                }
+
             }
-            ViewBag.USU_ID = new SelectList(db.USUARIO, "USU_ID", "USU_LG", eNDERECO.USU_ID);
-            return View(eNDERECO);
+            else
+            {
+                ViewBag.USU_ID = eNDERECO.USU_ID;
+                return View(eNDERECO);
+            }
         }
 
         // GET: Endereco/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ENDERECO eNDERECO = db.ENDERECO.Find(id);
-            if (eNDERECO == null)
-            {
-                return HttpNotFound();
-            }
-            return View(eNDERECO);
-        }
+        //public ActionResult Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    ENDERECO eNDERECO = db.ENDERECO.Find(id);
+        //    if (eNDERECO == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(eNDERECO);
+        //}
 
         // POST: Endereco/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            ENDERECO eNDERECO = db.ENDERECO.Find(id);
-            db.ENDERECO.Remove(eNDERECO);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult DeleteConfirmed(int id)
+        //{
+        //    ENDERECO eNDERECO = db.ENDERECO.Find(id);
+        //    db.ENDERECO.Remove(eNDERECO);
+        //    db.SaveChanges();
+        //    return RedirectToAction("Index");
+        //}
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        db.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
         #endregion
 
     }

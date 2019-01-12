@@ -4,12 +4,33 @@
     ViewBag.Title = "Altera dados Usuario";
     var _imgBtnOk = @Url.Content("~/Content/imagens/btnOk.png");
     var _imgBtnErro = @Url.Content("~/Content/imagens/Cadnegado.png");
+    var statusUsuario = Model.USU_ST;
+
 }
 
 <script type="text/javascript">
+    function checa(login) {
+        if ($("#USU_NM").val() == "" || $("#USU_LG").val() == "") {
+            alert("Existe campo em branco");
+        } else {
+            var check = document.getElementsByName("USU_SN_ALT");
+
+            for (var i = 0; i < check.length; i++) {
+                if (check[i].checked == true) {
+                    if ($("#senhaAntiga").val() == "" || $("#senhaNova").val() == "" || $("#confirmacao").val() == "") {
+                        alert("Existe campo em branco");
+                    } else {
+                        document.getElementById('form1').submit();
+                    }
+                } else {
+                    document.getElementById('form1').submit();
+                }
+            }
+        }
+    }
 
     function ativaAlteracaoSenha() {
-        var check = document.getElementsByName("alteraSenha");
+        var check = document.getElementsByName("USU_SN_ALT");
 
         for (var i = 0; i < check.length; i++) {
             if (check[i].checked == true) {
@@ -54,9 +75,8 @@
     }
 
     function perdeFocusCampoSenhaAntiga(login) {
-        var USU_ID = @ViewBag.idUsuario;
         $("#progressBar").show();
-        $.getJSON('@Url.Action("AjaxValidaSenhaAntiga")', { _senhaAntiga: $("#senhaAntiga").val(), _USU_ID: USU_ID}, function (j) {
+        $.getJSON('@Url.Action("AjaxValidaSenhaAntiga")', { _senhaAntiga: $("#senhaAntiga").val(), _USU_ID: '@Model.USU_ID' }, function (j) {
             if (j.OK == true && $("#USU_LG").val() != "") {
                 document.getElementById('senhaNova').removeAttribute("disabled", "disabled");
                 $("#senhaNova").focus();
@@ -159,8 +179,10 @@
           margin-top: -25px; /* e retrocede metade da altura */
 }
 </style>
-@using (Html.BeginForm("Edit", "Usuario", FormMethod.Post, new { @class = "form-inline" }))
+@using (Html.BeginForm("Edit", "Usuario", FormMethod.Post, new { @class = "form-inline", id = "form1" }))
 {
+    @Html.HiddenFor(model => model.USU_ID)
+    @Html.HiddenFor(model => model.USU_SN)
     <div class="offset3">
         <fieldset class="span8">
             <div class="controls-row">
@@ -194,8 +216,9 @@
             <div class="controls-row">
                 <div class="control-group span4">
                     <div class="controls">
+                        @*Altera Senha @Html.CheckBoxFor(model => model.USU_SN_ALT, new { id= "USU_SN_ALT", onclick = "ativaAlteracaoSenha()", name = "USU_SN_ALT" })*@
                         <label for="coding"> Altera Senha </label>
-                        <input type="checkbox" name="alteraSenha" valor="false" onclick="ativaAlteracaoSenha()">
+                        <input id="USU_SN_ALT" name="USU_SN_ALT" type="checkbox" value="false" onclick="ativaAlteracaoSenha()">
                     </div>
                 </div>
             </div>
@@ -206,7 +229,7 @@
                         Senha Antiga:
                     </label>
                     <div class="controls">
-                        @Html.PasswordFor(model => model.USU_SN, new { id = "senhaAntiga", @class = "span12", onblur = "javascript: perdeFocusCampoSenhaAntiga(this.value);" })
+                        <input type="password" id="senhaAntiga" class = "span12" name="confirmacao" onblur = "javascript: perdeFocusCampoSenhaAntiga(this.value);" />
                     </div>
                 </div>
                 <div class="control-group span4">
@@ -214,7 +237,8 @@
                         Senha Nova:
                     </label>
                     <div class="controls">
-                        @Html.PasswordFor(model => model.USU_SN, new { id = "senhaNova", @class = "span12", onblur = "javascript: perdeFocusCampoSenhaNova(this.value);", onfocus = "javascript: ganhaFocusCampoSenhaNova(this.value);", disabled = "disabled" })
+                        @*<input type="password" id="senhaNova" class="span12"  onblur = "javascript: perdeFocusCampoSenhaNova(this.value);" onfocus = "javascript: ganhaFocusCampoSenhaNova(this.value);" disabled = "disabled"" />*@
+                        @Html.PasswordFor(model => model.USU_SN_NOVA, new { id = "senhaNova", @class = "span12", onblur = "javascript: perdeFocusCampoSenhaNova(this.value);", onfocus = "javascript: ganhaFocusCampoSenhaNova(this.value);", disabled = "disabled" })
                     </div>
                 </div>
                 <div class="control-group span4">
@@ -235,14 +259,15 @@
             <div class="controls-row">
                 <div class="control-group span4">
                     <div class="controls">
-                        Se usuário Ativo @Html.CheckBoxFor(model => model.USU_ST.HasValue)
+                        Se usuário Ativo @Html.CheckBox("USU_ST", statusUsuario)
+                        @*Se usuário Ativo @Html.CheckBoxFor(model => model.USU_ST.HasValue, new { id= "USU_ST" } )*@
                     </div>
                 </div>
             </div>
             <div class="pagination-centered">
                 <legend></legend>
                 @Html.ActionLink("Voltar", "Principal", "Home", null, new { @class = "btn", title = "Cique para Voltar" })
-                <input type="submit" class="btn btn-success" value="Salvar" title="Clique para salvar novo Usuário" />
+                <input type="button" class="btn btn-success" value="Salvar" title="Clique para salvar dados do Usuário" Onclick="checa();">
             </div>
         </fieldset>
     </div>
