@@ -1,4 +1,4 @@
-﻿@model mootit_aplication.Models.ENDERECO
+﻿@model mootit_aplication.Models.EnderecoModel
 
 @{
     ViewBag.Title = "Novo Endereço";
@@ -92,7 +92,7 @@
 
             <div class="pagination-centered">
                 <legend></legend>
-                @Html.ActionLink("Voltar", "Index", "Home", null, new { @class = "btn", title = "Cique para Voltar" })
+                @Html.ActionLink("Voltar", "Edit", "Usuario", new { USU_ID = Model.USU_ID}, new {@class = "btn", title = "Cique para Voltar" })
                 <input type="button" class="btn btn-success" value="Salvar" title="Clique para salvar Endereço do Usuário" Onclick="checa();">
             </div>
         </fieldset>

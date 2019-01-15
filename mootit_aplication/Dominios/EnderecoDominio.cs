@@ -1,9 +1,7 @@
 ﻿using mootit_aplication.Models;
-using System;
-using System.Collections.Generic;
+using mootit_aplication.Persistencia;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
 
 namespace mootit_aplication.Dominios
 {
@@ -16,26 +14,69 @@ namespace mootit_aplication.Dominios
             db = new mootitEntities1();
         }
 
-        public ENDERECO inserir(ENDERECO item)
+        public EnderecoModel inserir(EnderecoModel item)
         {
-            db.ENDERECO.Add(item);
+            ENDERECO _item = new ENDERECO();
+
+            _item.END_ID = item.END_ID;
+            _item.USU_ID = item.USU_ID;
+            _item.END_LOGRADOURO = item.END_LOGRADOURO;
+            _item.END_NR = item.END_NR;
+            _item.END_CIDADE = item.END_CIDADE;
+            _item.END_BAIRRO = item.END_BAIRRO;
+            _item.END_CEP = item.END_CEP;
+            _item.END_LOGRADOURO = item.END_LOGRADOURO;
+            _item.END_LATITUDE = item.END_LATITUDE;
+            _item.END_LONGITUDE = item.END_LONGITUDE;
+            
+
+            db.ENDERECO.Add(_item);
             db.SaveChanges();
 
             return item;
         }
-        public void alterar(ENDERECO item)
+        public void alterar(EnderecoModel item)
         {
-            db.Entry(item).State = EntityState.Modified;
+            ENDERECO _item = new ENDERECO();
+
+            _item.END_ID = item.END_ID;
+            _item.USU_ID = item.USU_ID;
+            _item.END_LOGRADOURO = item.END_LOGRADOURO;
+            _item.END_NR = item.END_NR;
+            _item.END_CIDADE = item.END_CIDADE;
+            _item.END_BAIRRO = item.END_BAIRRO;
+            _item.END_CEP = item.END_CEP;
+            _item.END_LOGRADOURO = item.END_LOGRADOURO;
+            _item.END_LATITUDE = item.END_LATITUDE;
+            _item.END_LONGITUDE = item.END_LONGITUDE;
+
+            db.Entry(_item).State = EntityState.Modified;
             db.SaveChanges();
         }
 
-        public IQueryable<ENDERECO> buscaPorUsu_Id(int? usu_id)
+        public IQueryable<EnderecoModel> buscaPorUsu_Id(int? usu_id)
         {
             var _lista = db.ENDERECO.Where(c => c.USU_ID == usu_id);
-            return _lista;
+
+            return _lista.ToArray().Select(c =>
+                    new EnderecoModel
+                    {
+                        USU_ID = c.USU_ID,
+                        END_ID = c.END_ID,
+                        END_LOGRADOURO = c.END_LOGRADOURO,
+                        END_NR = c.END_NR,
+                        END_CIDADE = c.END_CIDADE,
+                        END_BAIRRO = c.END_BAIRRO,
+                        END_CEP = c.END_CEP,
+                        END_LATITUDE = c.END_LATITUDE,
+                        END_LONGITUDE = c.END_LONGITUDE,
+
+                    }).
+                    AsQueryable()
+            ;
         }
 
-        public IQueryable<ENDERECO> buscarTodosMenosUsuLogodo(int? usu_id)
+        public IQueryable<EnderecoModel> buscarTodosMenosUsuLogodo(int? usu_id)
         {
             var _lista =
                from END in db.ENDERECO
@@ -43,7 +84,7 @@ namespace mootit_aplication.Dominios
                select new { ENDERECO = END };
 
             return _lista.ToArray().Select(c =>
-                    new ENDERECO
+                    new EnderecoModel
                     {
                         USU_ID = c.ENDERECO.USU_ID,
                         END_ID = c.ENDERECO.END_ID,

@@ -1,4 +1,4 @@
-﻿@model mootit_aplication.Models.ENDERECO
+﻿@model mootit_aplication.Models.EnderecoModel
 <!DOCTYPE html>
 <html>
 <head>
@@ -60,6 +60,6 @@
 
 
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIjJLZqCnL0zGJ7olMVbt3dDFQ-JS4OOY&callback=myMap"></script>
+    <script src="@System.Configuration.ConfigurationManager.AppSettings["KeyGoogleMapa"]&callback=myMap"></script>
 </body>
 </html>

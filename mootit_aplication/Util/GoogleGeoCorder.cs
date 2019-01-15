@@ -88,11 +88,8 @@ namespace mootit_aplication.Util
         {
             var root = new RootObject();
 
-            var url = string.Format(ConfigurationManager.AppSettings["KeyGoogle"] + "&address="+ HttpUtility.UrlEncode(address));
+            var url = string.Format(ConfigurationManager.AppSettings["KeyGoogleEndereco"] + "&address="+ HttpUtility.UrlEncode(address));
             
-            //string.Format(
-            //        "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyCzbpaBpwohyZZdiQShyyZdLhiYbfdqhg0&address=" + HttpUtility.UrlEncode(address));
-
             var req = (HttpWebRequest)WebRequest.Create(url);
 
             var res = (HttpWebResponse)req.GetResponse();

@@ -93,7 +93,7 @@ namespace mootit_aplication.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Create([Bind(Include = "USU_ID,END_NR,END_BAIRRO,END_CEP,END_LOGRADOURO,END_CIDADE")] ENDERECO eNDERECO)
+        public ActionResult Create([Bind(Include = "USU_ID,END_NR,END_BAIRRO,END_CEP,END_LOGRADOURO,END_CIDADE")] EnderecoModel eNDERECO)
         {
             eNDERECO.USU_ID = this.USU_ID;
 
@@ -153,7 +153,7 @@ namespace mootit_aplication.Controllers
             }
             else
             {
-                ENDERECO item = new ENDERECO();
+                EnderecoModel item = new EnderecoModel();
 
                 foreach (var _item in eNDERECO)
                 {
@@ -177,7 +177,7 @@ namespace mootit_aplication.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Edit([Bind(Include = "END_ID,USU_ID,END_LOGRADOURO,END_NR,END_CIDADE,END_BAIRRO,END_CEP")] ENDERECO eNDERECO)
+        public ActionResult Edit([Bind(Include = "END_ID,USU_ID,END_LOGRADOURO,END_NR,END_CIDADE,END_BAIRRO,END_CEP")] EnderecoModel eNDERECO)
         {
 
             string addrres = eNDERECO.END_LOGRADOURO + ", " + eNDERECO.END_NR + ", " + eNDERECO.END_CIDADE + ", " + eNDERECO.END_BAIRRO;
@@ -196,7 +196,7 @@ namespace mootit_aplication.Controllers
                 try
                 {
                     enderecoDominio.alterar(eNDERECO);
-
+                    
                     return RedirectToAction("Principal", "Home", new { usu_id = eNDERECO.USU_ID });
                 }
                 catch (Exception e)
@@ -208,7 +208,7 @@ namespace mootit_aplication.Controllers
             }
             else
             {
-                ViewBag.USU_ID = eNDERECO.USU_ID;
+                ViewBag.idUsuario = eNDERECO.USU_ID;
                 return View(eNDERECO);
             }
         }

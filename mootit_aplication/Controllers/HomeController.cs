@@ -112,10 +112,9 @@ namespace mootit_aplication.Controllers
         {
             @ViewBag.idUsuario = usu_id;
 
-
             var eNDERECO = enderecoDominio.buscaPorUsu_Id(usu_id);
 
-            ENDERECO item = new ENDERECO();
+            EnderecoModel item = new EnderecoModel();
             foreach (var _item in eNDERECO)
             {
                 item.END_ID = _item.END_ID;
@@ -148,7 +147,7 @@ namespace mootit_aplication.Controllers
             else
             {
 
-                ENDERECO _item = new ENDERECO();
+                EnderecoModel _item = new EnderecoModel();
                 _item.USU_ID = usu_id;
 
                 enderecoDominio.inserir(_item);
@@ -177,7 +176,7 @@ namespace mootit_aplication.Controllers
         {
             var eNDERECO = enderecoDominio.buscaPorUsu_Id(this.USU_ID);
 
-            ENDERECO itemUsuario = new ENDERECO();
+            EnderecoModel itemUsuario = new EnderecoModel();
             foreach (var _item in eNDERECO)
             {
                 itemUsuario.END_ID = _item.END_ID;
@@ -199,7 +198,7 @@ namespace mootit_aplication.Controllers
             //double Lat1 = Convert.ToDouble(itemUsuario.END_LATITUDE);
             //double Long1 = Convert.ToDouble(itemUsuario.END_LONGITUDE);
 
-            List<EnderecoViewModel> listaEndereco = new List<EnderecoViewModel>();
+            List<EnderecoModel> listaEndereco = new List<EnderecoModel>();
             var enderecos = enderecoDominio.buscarTodosMenosUsuLogodo(itemUsuario.USU_ID); //db.ENDERECO.Where(x => x.USU_ID != itemUsuario.USU_ID).AsQueryable();
 
             foreach (var item in enderecos)
@@ -212,15 +211,15 @@ namespace mootit_aplication.Controllers
                 
                 double distance = (DistanceAddress.DistanceBetween(latA, latB, longA, longB));
                 
-                listaEndereco.Add(new EnderecoViewModel() { USU_ID = item.USU_ID, END_LATITUDE = item.END_LATITUDE, END_LONGITUDE = item.END_LONGITUDE, END_DISTANCIA = distance });
+                listaEndereco.Add(new EnderecoModel() { USU_ID = item.USU_ID, END_LATITUDE = item.END_LATITUDE, END_LONGITUDE = item.END_LONGITUDE, END_DISTANCIA = distance });
             }
 
-            List<EnderecoViewModel> listaEnderecosProximos =
+            List<EnderecoModel> listaEnderecosProximos =
                                                             (from end in listaEndereco
                                                              orderby end.END_DISTANCIA descending
                                                              select end).Take(3).ToList();
 
-            listaEndereco = listaEndereco.OrderByDescending(x => x.END_DISTANCIA).Skip(3).Take(3).ToList();
+            //listaEndereco = listaEndereco.OrderByDescending(x => x.END_DISTANCIA).Skip(3).Take(3).ToList();
 
             return Json(listaEnderecosProximos, JsonRequestBehavior.AllowGet);
         }

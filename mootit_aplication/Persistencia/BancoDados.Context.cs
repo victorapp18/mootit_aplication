@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace mootit_aplication.Models
+namespace mootit_aplication.Persistencia
 {
     using System;
     using System.Data.Entity;

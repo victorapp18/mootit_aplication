@@ -1,9 +1,7 @@
 ﻿using mootit_aplication.Models;
-using System;
-using System.Collections.Generic;
+using mootit_aplication.Persistencia;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
 
 namespace mootit_aplication.Dominios
 {
@@ -16,28 +14,59 @@ namespace mootit_aplication.Dominios
             db = new mootitEntities1();
         }
 
-        public USUARIO inserir(USUARIO item)
+        public USUARIO inserir(UsuarioModel item)
         {
-            db.USUARIO.Add(item);
+            USUARIO _item = new USUARIO();
+
+            _item.USU_ID = item.USU_ID;
+            _item.USU_NM = item.USU_NM;
+            _item.USU_LG = item.USU_LG;
+            _item.USU_SN = item.USU_SN;
+            _item.USU_ST = item.USU_ST;
+            _item.USU_TP_AUTH = item.USU_TP_AUTH;
+            
+            db.USUARIO.Add(_item);
             db.SaveChanges();
             
-            return item;
+            return _item;
         }
 
 
-        public void alterar(USUARIO item)
+        public void alterar(UsuarioModel item)
         {
-            db.Entry(item).State = EntityState.Modified;
+            USUARIO _item = new USUARIO();
+
+            _item.USU_ID = item.USU_ID;
+            _item.USU_NM = item.USU_NM;
+            _item.USU_LG = item.USU_LG;
+            _item.USU_SN = item.USU_SN;
+            _item.USU_ST = item.USU_ST;
+            _item.USU_TP_AUTH = item.USU_TP_AUTH;
+
+            db.Entry(_item).State = EntityState.Modified;
             db.SaveChanges();
         }
 
-        public IQueryable<USUARIO> buscaPorId(int? usu_id)
+        public IQueryable<UsuarioModel> buscaPorId(int? usu_id)
         {
             var _lista = db.USUARIO.Where(c => c.USU_ID == usu_id);
-            return _lista.OrderBy(c => c.USU_NM);
+
+            return _lista.ToArray().Select(c =>
+                    new UsuarioModel
+                    {
+                        USU_ID = c.USU_ID,
+                        USU_NM = c.USU_NM,
+                        USU_LG = c.USU_LG,
+                        USU_SN = c.USU_SN,
+                        USU_ST = c.USU_ST,
+                        USU_TP_AUTH = c.USU_TP_AUTH,
+
+                    }).OrderBy(c => c.USU_NM)
+                    .AsQueryable()
+            ;
         }
 
-        public IQueryable<USUARIO> buscaPorLogin(string usu_lg)
+        public IQueryable<UsuarioModel> buscaPorLogin(string usu_lg)
         {
             var _lista =
                from USU in db.USUARIO
@@ -45,7 +74,7 @@ namespace mootit_aplication.Dominios
                select new { USUARIO = USU };
 
             return _lista.ToArray().Select(c =>
-                    new USUARIO
+                    new UsuarioModel
                     {
                         USU_ID = c.USUARIO.USU_ID,
                         USU_NM = c.USUARIO.USU_NM,

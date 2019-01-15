@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace mootit_aplication.Models
+namespace mootit_aplication.Persistencia
 {
     using System;
     using System.Collections.Generic;
@@ -26,9 +26,7 @@ namespace mootit_aplication.Models
         public Nullable<bool> USU_ST { get; set; }
         public string USU_NM { get; set; }
         public Nullable<byte> USU_TP_AUTH { get; set; }
-        
-        public string USU_SN_NOVA { get; set; }
-
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ENDERECO> ENDERECO { get; set; }
     }

@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\formosa\Documents\backup victor 28 06 20166\VICTOR\projetos\teste software\mootit_aplication\mootit_aplication\Models\BancoDados.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\formosa\Documents\backup victor 28 06 20166\VICTOR\projetos\teste software\mootit_aplication\mootit_aplication\Persistencia\BancoDados.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

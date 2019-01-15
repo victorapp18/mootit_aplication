@@ -11,7 +11,7 @@ using mootit_aplication.Dominios;
 
 namespace mootit_aplication.Controllers
 {
-    public class UsuarioController : Controller
+    public class UsuarioController : Controle.Controlador
     {
     
         #region Auxiliar
@@ -24,6 +24,17 @@ namespace mootit_aplication.Controllers
                     _usuarioDominio = new UsuarioDominio();
                 return _usuarioDominio;
             }
+        }
+
+
+        public int USU_ID
+        {
+            get
+            {
+                try { return (int)Session["USU_ID"]; }
+                catch (Exception ex) { throw new Exception("Erro ao recuperar Requisição " + ex.Message); }
+            }
+            set { Session["USU_ID"] = value; }
         }
 
         #endregion
@@ -61,9 +72,9 @@ namespace mootit_aplication.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Create([Bind(Include = "USU_NM,USU_LG,USU_SN,USU_ST")] USUARIO uSUARIO, FormCollection campos)
+        public ActionResult Create([Bind(Include = "USU_NM,USU_LG,USU_SN,USU_ST")] UsuarioModel uSUARIO, FormCollection campos)
         {
-            USUARIO _item = new USUARIO();
+            UsuarioModel _item = new UsuarioModel();
             _item = viewParaEntidade(null, campos);
             
             if (ModelState.IsValid)
@@ -107,11 +118,10 @@ namespace mootit_aplication.Controllers
                     return HttpNotFound();
                 }
 
-                USUARIO _item = new USUARIO();
+                UsuarioModel _item = new UsuarioModel();
 
                 foreach (var item in uSUARIO)
                 {
-                    ViewBag.usuario = item.USU_LG;
                     _item.USU_ID = item.USU_ID;
                     _item.USU_NM = item.USU_NM;
                     _item.USU_LG = item.USU_LG;
@@ -119,6 +129,7 @@ namespace mootit_aplication.Controllers
                     _item.USU_ST = item.USU_ST;
                     _item.USU_TP_AUTH = item.USU_TP_AUTH;
                 }
+                @ViewBag.usuario = _item.USU_LG;
 
                 return View(_item);
             }
@@ -132,7 +143,7 @@ namespace mootit_aplication.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Edit([Bind(Include = "USU_ID,USU_LG,USU_ST,USU_NM,USU_SN,USU_SN_NOVA")] USUARIO uSUARIO)
+        public ActionResult Edit([Bind(Include = "USU_ID,USU_LG,USU_ST,USU_NM,USU_SN,USU_SN_NOVA")] UsuarioModel uSUARIO)
         {
             try
             {
@@ -144,12 +155,16 @@ namespace mootit_aplication.Controllers
                     
                     usuarioDominio.alterar(uSUARIO);
 
+                    this.USU_LG = uSUARIO.USU_LG;
+
                     return RedirectToAction("Edit", "Endereco", new { USU_ID = uSUARIO.USU_ID });
                 }
                 else
                 {
 
                     usuarioDominio.alterar(uSUARIO);
+
+                    this.USU_LG = uSUARIO.USU_LG;
 
                     return RedirectToAction("Edit", "Endereco", new { USU_ID = uSUARIO.USU_ID });
                 }
@@ -192,10 +207,10 @@ namespace mootit_aplication.Controllers
         #endregion
 
         #region Util
-        protected USUARIO viewParaEntidade(System.IConvertible id, FormCollection campos)
+        protected UsuarioModel viewParaEntidade(System.IConvertible id, FormCollection campos)
         {
             string _senha = "";
-            USUARIO _item = new USUARIO();
+            UsuarioModel _item = new UsuarioModel();
             _item.USU_NM = campos["USU_NM"];
             _item.USU_LG = campos["USU_LG"];
             _senha = campos["USU_SN"].ToMD5();
@@ -206,17 +221,19 @@ namespace mootit_aplication.Controllers
         }
 
         [HttpGet]
-        public JsonResult AjaxValidaUsuario(string _login)
+        public JsonResult AjaxValidaUsuario(string _login, string _M_LG)
         {
             var _usuario = usuarioDominio.buscaPorLogin(_login);
 
+            _usuario = _usuario.Where(c=>c.USU_LG != _M_LG);
+            
             if (_usuario.Count() > 0)
             {
                 return Json(new { OK = false}, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                return Json(new { OK = true}, JsonRequestBehavior.AllowGet);
+                return Json(new { OK = true }, JsonRequestBehavior.AllowGet);
             }
         }
 

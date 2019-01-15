@@ -1,4 +1,4 @@
-﻿@model mootit_aplication.Models.USUARIO
+﻿@model mootit_aplication.Models.UsuarioModel
 
 @{
     ViewBag.Title = "Altera dados Usuario";
@@ -52,7 +52,7 @@
 
     function perdeFocusCampoLogin(login) {
         $("#progressBar").show();
-        $.getJSON('@Url.Action("AjaxValidaUsuario")', { _login: $("#USU_LG").val() }, function (j) {
+        $.getJSON('@Url.Action("AjaxValidaUsuario")', { _login: $("#USU_LG").val(), _M_LG: '@ViewBag.usuario' }, function (j) {
             if (j.OK == true && $("#USU_LG").val() != "") {
                 $("#Resultado").text("");
                 $("#Resultado").css({ "color": "Green" });
@@ -94,7 +94,7 @@
                 $("#senhaAntiga").focus();
                 document.getElementById('senhaNova').setAttribute("disabled", false);
                 document.getElementById('confirmacao').setAttribute("disabled", false);
-                }
+            }
             $("#progressBar").hide();
         });
     }
@@ -135,7 +135,7 @@
         }
         else {
 
-            if($("#senhaNova").val() != ""){
+            if ($("#senhaNova").val() != "") {
                 var msg_confirmacao = "Senha não confirmada!";
                 if ($("#confirmacao").val() == "") { msg_confirmacao = "Digite a confirmação!"; }
                 $("#ConfirmaSenha").text("");
@@ -266,7 +266,7 @@
             </div>
             <div class="pagination-centered">
                 <legend></legend>
-                @Html.ActionLink("Voltar", "Principal", "Home", null, new { @class = "btn", title = "Cique para Voltar" })
+                @Html.ActionLink("Voltar", "Principal", "Home", new { usu_id = Model.USU_ID }, new { @class = "btn", title = "Cique para Voltar" })
                 <input type="button" class="btn btn-success" value="Salvar" title="Clique para salvar dados do Usuário" Onclick="checa();">
             </div>
         </fieldset>
