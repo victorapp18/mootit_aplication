@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using mootit_aplication.Models;
 using mootit_aplication.Dominios;
+using System.Web.Security;
 
 namespace mootit_aplication.Controllers
 {
@@ -90,6 +91,8 @@ namespace mootit_aplication.Controllers
                         _item.USU_ID = item.USU_ID;
                     }
 
+                    FormsAuthentication.RedirectFromLoginPage(_item.USU_LG, false);
+
                     return RedirectToAction("Create", "Endereco", new { USU_ID = _item.USU_ID });
                 }
                 catch
@@ -129,8 +132,7 @@ namespace mootit_aplication.Controllers
                     _item.USU_ST = item.USU_ST;
                     _item.USU_TP_AUTH = item.USU_TP_AUTH;
                 }
-                @ViewBag.usuario = _item.USU_LG;
-
+                
                 return View(_item);
             }
             catch
@@ -155,7 +157,8 @@ namespace mootit_aplication.Controllers
                     
                     usuarioDominio.alterar(uSUARIO);
 
-                    this.USU_LG = uSUARIO.USU_LG;
+
+                    FormsAuthentication.RedirectFromLoginPage(uSUARIO.USU_LG, false);
 
                     return RedirectToAction("Edit", "Endereco", new { USU_ID = uSUARIO.USU_ID });
                 }
@@ -164,7 +167,7 @@ namespace mootit_aplication.Controllers
 
                     usuarioDominio.alterar(uSUARIO);
 
-                    this.USU_LG = uSUARIO.USU_LG;
+                    FormsAuthentication.RedirectFromLoginPage(uSUARIO.USU_LG, false);
 
                     return RedirectToAction("Edit", "Endereco", new { USU_ID = uSUARIO.USU_ID });
                 }
@@ -221,11 +224,11 @@ namespace mootit_aplication.Controllers
         }
 
         [HttpGet]
-        public JsonResult AjaxValidaUsuario(string _login, string _M_LG)
+        public JsonResult AjaxValidaUsuario(string _login)
         {
             var _usuario = usuarioDominio.buscaPorLogin(_login);
 
-            _usuario = _usuario.Where(c=>c.USU_LG != _M_LG);
+            _usuario = _usuario.Where(c=>c.USU_LG != usuarioLogado.USU_LG);
             
             if (_usuario.Count() > 0)
             {

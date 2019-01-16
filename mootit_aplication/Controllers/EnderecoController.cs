@@ -84,8 +84,6 @@ namespace mootit_aplication.Controllers
         // GET: Endereco/Create
         public ActionResult Create(int usu_id)
         {
-            this.USU_ID = usu_id;
-            
             return View();
         }
 
@@ -95,7 +93,7 @@ namespace mootit_aplication.Controllers
         [HttpPost]
         public ActionResult Create([Bind(Include = "USU_ID,END_NR,END_BAIRRO,END_CEP,END_LOGRADOURO,END_CIDADE")] EnderecoModel eNDERECO)
         {
-            eNDERECO.USU_ID = this.USU_ID;
+            eNDERECO.USU_ID = usuarioLogado.USU_ID;
 
             string addrres = eNDERECO.END_LOGRADOURO + ", " + eNDERECO.END_NR + ", "+eNDERECO.END_CIDADE+", " + eNDERECO.END_BAIRRO;
 
@@ -114,16 +112,13 @@ namespace mootit_aplication.Controllers
                 {
                     enderecoDominio.inserir(eNDERECO);
 
-                    var buscalogin = usuarioDominio.buscaPorId(this.USU_ID);
+                    var buscalogin = usuarioDominio.buscaPorId(usuarioLogado.USU_ID);
 
                     foreach (var item in buscalogin)
                     {
-                        this.USU_LG = item.USU_LG;
                         eNDERECO.USU_ID = item.USU_ID;
                     }
-
-                    ViewBag.USU_ID = eNDERECO.USU_ID;
-
+                    
                     return RedirectToAction("Principal", "Home", new {usu_id = eNDERECO.USU_ID });
                 }
                 catch(Exception e)
@@ -208,7 +203,6 @@ namespace mootit_aplication.Controllers
             }
             else
             {
-                ViewBag.idUsuario = eNDERECO.USU_ID;
                 return View(eNDERECO);
             }
         }

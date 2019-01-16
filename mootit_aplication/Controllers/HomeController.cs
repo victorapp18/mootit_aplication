@@ -56,8 +56,6 @@ namespace mootit_aplication.Controllers
         #region View
         public ActionResult Index()
         {
-            ViewBag.idUsuario = null; 
-
             return View();
         }
 
@@ -84,10 +82,8 @@ namespace mootit_aplication.Controllers
                     }
 
                     if (usu_sn == campos["USU_SN"].ToMD5()) {
-
-                        this.USU_ID = usu_id;
-
-                        this.USU_LG = usu_lg;
+                        
+                        FormsAuthentication.RedirectFromLoginPage(usu_lg, false);
 
                         return RedirectToAction("Principal", new { usu_id = usu_id });
                     }else
@@ -110,7 +106,6 @@ namespace mootit_aplication.Controllers
         }
         public ActionResult Principal(int? usu_id)
         {
-            @ViewBag.idUsuario = usu_id;
 
             var eNDERECO = enderecoDominio.buscaPorUsu_Id(usu_id);
 
@@ -174,7 +169,7 @@ namespace mootit_aplication.Controllers
         #region Util
         public JsonResult BuscaEndProximo()
         {
-            var eNDERECO = enderecoDominio.buscaPorUsu_Id(this.USU_ID);
+            var eNDERECO = enderecoDominio.buscaPorUsu_Id(usuarioLogado.USU_ID);
 
             EnderecoModel itemUsuario = new EnderecoModel();
             foreach (var _item in eNDERECO)

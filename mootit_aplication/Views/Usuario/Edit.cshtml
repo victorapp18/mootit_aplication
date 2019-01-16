@@ -52,7 +52,7 @@
 
     function perdeFocusCampoLogin(login) {
         $("#progressBar").show();
-        $.getJSON('@Url.Action("AjaxValidaUsuario")', { _login: $("#USU_LG").val(), _M_LG: '@ViewBag.usuario' }, function (j) {
+        $.getJSON('@Url.Action("AjaxValidaUsuario")', { _login: $("#USU_LG").val() }, function (j) {
             if (j.OK == true && $("#USU_LG").val() != "") {
                 $("#Resultado").text("");
                 $("#Resultado").css({ "color": "Green" });

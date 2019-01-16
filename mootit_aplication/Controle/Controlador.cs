@@ -12,17 +12,6 @@ namespace mootit_aplication.Controle
     {
         private mootitEntities1 db = new mootitEntities1();
 
-
-        public string USU_LG
-        {
-            get
-            {
-                try { return (string)Session["USU_LG"]; }
-                catch (Exception ex) { throw new Exception("Erro ao recuperar Requisição " + ex.Message); }
-            }
-            set { Session["USU_LG"] = value; }
-        }
-
         protected MensagemTela mensagem
         {
             set
@@ -65,8 +54,6 @@ namespace mootit_aplication.Controle
         {
             base.Initialize(requestContext);
 
-            ViewBag.usuario = this.USU_LG;
-
             if (usuarioLogado != null)
             {
                 //var _funcionario = funcionarioLogado;
@@ -75,10 +62,9 @@ namespace mootit_aplication.Controle
 
                 ViewBag.nomeUsuarioLogado = usuarioLogado.USU_NM;
                 ViewBag.idUsuario = _usuarioLogado.USU_ID;
+                ViewBag.usuario = _usuarioLogado.USU_LG;
                 //...
             }
-
-
         }
     }
 }
